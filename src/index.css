@@ -1,0 +1,2175 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background-color: #f5f5f5;
+  color: #1a1a2e;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.contenedor-main {
+  width: 100%;
+
+  padding: 2rem 10rem;
+}
+.contenedor-main h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a2e;
+  text-align: center;
+}
+
+.grilla-productos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .grilla-productos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 500px) {
+  .grilla-productos {
+    grid-template-columns: 1fr;
+  }
+}
+
+.error-msg {
+  color: #e94560;
+  font-size: 1rem;
+  padding: 1rem;
+  text-align: center;
+  grid-column: 1/-1;
+}
+
+/* ============================================
+   CARD DE PRODUCTO — components/ProductsCards.jsx
+   ============================================ */
+
+/* contenedor de la card: sin fondo ni sombra, la foto va directa sobre la página */
+.producto-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* wrapper de las dos imágenes: necesario para que la secundaria se superponga */
+.cards-dinamic {
+  position: relative;
+}
+
+/* imagen secundaria: oculta por defecto, se superpone sobre la principal */
+.image-secundary {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+/* al pasar el mouse, aparece la segunda foto */
+.cards-dinamic:hover .image-secundary {
+  opacity: 1;
+}
+
+/* transición suave entre las dos fotos */
+.image-principal,
+.image-secundary {
+  transition: opacity 0.5s ease;
+}
+
+/* imágenes: cuadradas, llenan todo el espacio sin padding */
+.producto-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  object-fit: cover;
+  background-color: #f5f5f5;
+}
+
+/* bloque de texto debajo de la foto, alineado a la izquierda */
+.producto-card .producto-info {
+  padding: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 0.25rem;
+}
+
+/* nombre del producto, cortado a 2 líneas máximo */
+.producto-card .producto-info h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* precio */
+.producto-card .producto-info .precio {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.carrito-btn {
+  border-radius: 40%;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  transition: all 0.3s ease;
+}
+.carrito-btn:hover {
+  background-color: rgba(68, 56, 56, 0.15);
+}
+
+.carrito-badge {
+  position: absolute;
+  top: -1px;
+  right: -7px;
+  background-color: #e94560;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.carrito-badge.visible {
+  display: flex;
+}
+
+.panel-carrito {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+}
+.panel-carrito.activo {
+  transform: translateX(0);
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #d8d5d5;
+  margin: -1.5rem -1.5rem 1rem;
+  padding: 1.5rem;
+  border-bottom: 2px solid #e8e8ec;
+}
+.panel-carrito .panel-header h2 {
+  font-size: 1.5rem;
+  color: #1a1a2e;
+}
+.panel-carrito .panel-header .btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #a0a0b0;
+  transition: all 0.3s ease;
+}
+.panel-carrito .panel-header .btn-cerrar:hover {
+  color: #e94560;
+}
+.panel-carrito #contCarrito {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.panel-carrito #totalCarrito {
+  border-top: 2px solid #f5f5f5;
+  padding-top: 1rem;
+}
+.total-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-align: left;
+}
+.panel-carrito #totalCarrito .total-precio span {
+  color: #e94560;
+  font-size: 1.3rem;
+}
+
+/* ============================================
+   ITEM DEL CARRITO — components/ProductsCarrito.jsx
+   ============================================ */
+
+.carrito-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.8rem;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+}
+
+.carrito-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.carrito-item-header h3 {
+  font-size: 0.85rem;
+  color: #1a1a2e;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carrito-item-body {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.carrito-item-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.carrito-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.carrito-item .precio {
+  font-size: 0.9rem;
+  color: #e94560;
+  font-weight: 600;
+}
+
+.btn-basura {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #a0a0b0;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  transition: all 0.3s ease;
+}
+
+.btn-basura:hover {
+  color: #e94560;
+}
+
+/* ============================================
+   CONTROLES DE CANTIDAD — +/-
+   ============================================ */
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  width: fit-content;
+}
+
+.quantity-controls span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 16px;
+  text-align: center;
+}
+
+.btn-decrease,
+.btn-increase {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-decrease {
+  background-color: #ffffff;
+  color: #1a1a2e;
+  border: 1px solid #d0d0d8;
+}
+
+.btn-decrease:hover {
+  background-color: #e8e8ec;
+}
+
+.btn-increase {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.btn-increase:hover {
+  background-color: #e94560;
+}
+.empty-cart {
+  text-align: center;
+  margin-top: 2rem;
+  color: #0f0f0f;
+  font-size: 1rem;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 150;
+}
+.overlay.activo {
+  display: block;
+}
+
+body {
+  width: 100%;
+}
+
+.grid {
+  height: 100vh;
+  display: grid;
+  background-color: rgb(0, 0, 0);
+  background-size: cover;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  justify-items: center;
+  align-items: center;
+}
+.grid .hMasB {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  grid-column: 2/3;
+  grid-row: 2/3;
+  width: 100%;
+}
+.grid .img1 {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  object-fit: cover;
+  justify-self: start;
+}
+.grid .img1 img {
+  width: 300px;
+}
+.grid .img2 {
+  grid-column: 3/4;
+  grid-row: 1/2;
+  object-fit: cover;
+  justify-self: end;
+}
+.grid .img2 img {
+  width: 300px;
+}
+.grid .img3 {
+  grid-column: 1/2;
+  grid-row: 3/4;
+  object-fit: cover;
+  justify-self: start;
+}
+.grid .img3 img {
+  width: 300px;
+}
+.grid .img4 {
+  grid-column: 3/4;
+  grid-row: 3/4;
+  object-fit: cover;
+  justify-self: end;
+}
+.grid .img4 img {
+  width: 350px;
+}
+.grid .h1O {
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.grid .h1C {
+  background-color: palevioletred;
+  color: rgb(248, 215, 221);
+  font-size: 44px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.grid button {
+  background-color: papayawhip;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.body-new {
+  background-image: url(https://plus.unsplash.com/premium_photo-1736437251926-16fad34ec76f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+}
+
+/* ============================================
+   BANNER — componente components/Banner.jsx
+   ============================================ */
+
+.banner-style {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-style img {
+  width: 100%;
+  height: 800px;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-contenido {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+.banner-botones {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* --- título, por posición --- */
+.titulo-izq-abj,
+.titulo-izq-arr,
+.titulo-centro {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.4rem 0.8rem;
+  width: fit-content;
+}
+
+/* --- subtítulo, por posición --- */
+.subtitulo-izq-abj,
+.subtitulo-izq-arr,
+.subtitulo-centro {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #1a1a2e;
+  background-color: #ffffff;
+  padding: 0.4rem 0.8rem;
+  width: fit-content;
+}
+
+/* --- botón, por posición --- */
+.banner-btn-izq-abj,
+.banner-btn-izq-arr,
+.banner-btn-centro {
+  background-color: #ffffff;
+  color: #1a1a2e;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.banner-btn-izq-abj:hover,
+.banner-btn-izq-arr:hover,
+.banner-btn-centro:hover {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+/* --- posición del contenedor general --- */
+.posicion-centro {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  text-align: center;
+}
+
+.posicion-izq-abj {
+  bottom: 2rem;
+  left: 2rem;
+}
+
+.posicion-izq-arr {
+  top: 2rem;
+  left: 2rem;
+}
+/* ============================================
+   CARRUSEL DE PRODUCTOS DESTACADOS
+   components/CarrouselCard.jsx
+   ============================================ */
+
+.carousel-looks-cards {
+  position: relative;
+  padding: 0 0 2rem;
+  width: 100%;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ============================================
+   CARRUSEL "COMPRÁ EL LOOK" — CarrouselBanner + CarrouselCard
+   ============================================ */
+
+.carousel-looks-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 0rem 0.5rem;
+}
+
+.carousel-looks-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #1a1a2e;
+}
+
+.carousel-looks-header a {
+  border: 1px solid #1a1a2e;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.carousel-looks-header a:hover {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.carousel-looks {
+  position: relative;
+}
+
+.looks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+/*ANIMACION */
+@keyframes carousel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.carousel-card {
+  overflow: hidden;
+  animation: carousel-fade-in 0.2s ease;
+}
+
+.carousel-card img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  transition: transform 1s ease;
+}
+
+/* --- botones de navegación, flotando sobre las fotos --- */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid black;
+  width: 44px;
+  height: 44px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.carousel-btn:hover {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.carousel-btn:first-of-type {
+  left: 0rem;
+}
+
+.carousel-btn:last-of-type {
+  right: 0rem;
+}
+
+.carousel-btn.oculto {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .looks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .carousel-card img {
+    height: 450px;
+  }
+}
+
+@media (max-width: 500px) {
+  .looks-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   DETALLE DE PRODUCTO — layout general
+   pages/productsdetails/ProductsDetails.jsx
+   ============================================ */
+
+.detalle-producto {
+  padding-top: 1.5rem;
+}
+
+.detalle-principal {
+  display: grid;
+  grid-template-columns: 3.5fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .detalle-principal {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ============================================
+   GALERÍA DE IMÁGENES
+   pages/productsdetails/GaleriaImagenes.jsx
+   ============================================ */
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  position: relative;
+}
+
+.image-gallery img {
+  width: 100%;
+  aspect-ratio: 3/ 4;
+  object-fit: cover;
+  background-color: #f5f5f5;
+  display: block;
+}
+.show-more-wrapper {
+  position: absolute;
+  left: 50%;
+  bottom: -16px;
+  transform: translateX(-50%);
+}
+.btn-show-more {
+  margin-top: -30px;
+  width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  background: rgb(255, 255, 255);
+  border: 1px solid #1a1a2e;
+  color: #1a1a2e;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-show-more:hover {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+@media (max-width: 500px) {
+  .image-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   BREADCRUMB
+   components/Breadcrumb.jsx
+   ============================================ */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+}
+
+.breadcrumb a {
+  color: #a0a0b0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.breadcrumb a:hover {
+  color: #e94560;
+}
+
+.breadcrumb span {
+  color: #d0d0d8;
+}
+
+/* ============================================
+   INFO DE COMPRA — columna derecha
+   ============================================ */
+.info-compra {
+  top: 0px;
+  align-self: start;
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 20px;
+}
+.info-compra h1 {
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: black;
+  text-align: left;
+  margin: 0;
+}
+
+.info-compra .precio {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* ============================================
+   ESTRELLAS / RATING
+   components/Estrellas.jsx
+   ============================================ */
+
+.estrellas {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.estrellas-iconos {
+  color: #1a1a2e;
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.estrellas-texto {
+  font-size: 0.85rem;
+  color: #a0a0b0;
+}
+
+/* ============================================
+   SELECTOR DE COLORES
+   pages/productsdetails/SelectorColores.jsx
+   ============================================ */
+
+.selector-colores {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.selector-colores > p {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.colores-opciones {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.color-thumb {
+  width: 60px;
+  height: 60px;
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.color-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #f5f5f5;
+}
+
+.color-thumb:hover {
+  border-color: #a0a0b0;
+}
+
+.color-thumb.activo {
+  border-color: #1a1a2e;
+}
+
+.color-actual {
+  font-size: 0.85rem;
+  color: #a0a0b0;
+}
+
+/* ============================================
+   SELECTOR DE TALLES
+   ============================================ */
+
+.talles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.talles > p {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.talles-opciones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+.talle-btn {
+  padding: 0.7rem 0.2rem;
+  background-color: #e7e1e1;
+  border: none;
+  font-size: 13.8px;
+  font-weight: 500;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.talle-btn:hover {
+  background-color: #c6c6c6;
+}
+
+.talle-btn.activo {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+.Error-talle p {
+  font-size: 0.85rem;
+  color: red;
+  margin-top: 0.3rem;
+}
+
+/* ============================================
+   BOTÓN AÑADIR AL CARRITO (en detalle)
+   ============================================ */
+
+.btnAgregaar {
+  width: 100%;
+  padding: 1rem;
+  background-color: #1a1a2e;
+  color: #ffffff;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnAgregaar:hover {
+  background-color: #ed4c67;
+}
+
+/* ============================================
+   DESCRIPCIÓN Y DETALLES
+   ============================================ */
+
+.bloque-descripcion,
+.bloque-detalles {
+  border-top: 1px solid #f5f5f5;
+  padding-top: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.bloque-descripcion h3,
+.bloque-detalles h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.7rem;
+}
+
+.bloque-descripcion p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #16213e;
+  white-space: pre-line;
+}
+
+.bloque-detalles ul {
+  list-style: disc;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bloque-detalles li {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #16213e;
+}
+
+/* ============================================
+   PRODUCTOS RELACIONADOS
+   components/ProductosRelacionados.jsx
+   ============================================ */
+
+.productos-relacionados {
+  margin-top: 4rem;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 2rem;
+}
+
+.productos-relacionados h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+/* ============================================
+   ACORDEÓN — descripción y detalles
+   components/Acordeon.jsx
+   ============================================ */
+
+.acordeon {
+  border-top: 1px solid #e8e8ec;
+}
+
+.acordeon-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.acordeon-header:hover {
+  color: #e94560;
+}
+
+.acordeon-icono {
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.acordeon-contenido {
+  padding-bottom: 1.2rem;
+  animation: acordeon-abrir 0.3s ease;
+}
+
+@keyframes acordeon-abrir {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.descripcion-texto {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #16213e;
+  white-space: pre-line;
+}
+
+.lista-detalles {
+  list-style: disc;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.lista-detalles li {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #16213e;
+}
+/* ============================================
+   PRODUCTOS RELACIONADOS
+   pages/productsdetails/RelatedProducts.jsx
+   ============================================ */
+
+.productos-relacionados {
+  grid-column: 1;
+  margin-top: 3rem;
+  border-top: 1px solid #e8e8ec;
+  padding-top: 2rem;
+}
+.productos-relacionados h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  padding-left: 5rem;
+}
+
+.cards-grid-small {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  padding-left: 5rem;
+}
+
+.cards-grid-small .producto-card {
+  padding-inline: 0.75rem;
+}
+
+.cards-grid-small .producto-card img {
+  aspect-ratio: 1 / 1;
+  height: auto;
+}
+
+.cards-grid-small .producto-info h3 {
+  font-size: 0.8rem;
+}
+
+.cards-grid-small .producto-info .precio {
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .cards-grid-small {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-grid-small {
+    grid-template-columns: 1fr;
+  }
+}
+/* ============================================
+   ADMIN PANEL — pages/admin/AdminPanel.jsx
+   ============================================ */
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 600px;
+  margin-top: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.7rem;
+  border: 1px solid #d0d0d8;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #1a1a2e;
+}
+
+.image-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.image-row input {
+  flex: 1;
+}
+
+.image-row button {
+  background: none;
+  border: 1px solid #e94560;
+  color: #e94560;
+  padding: 0 0.7rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-agregar-imagen {
+  background: none;
+  border: 1px dashed #a0a0b0;
+  color: #a0a0b0;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.btn-agregar-imagen:hover {
+  border-color: #1a1a2e;
+  color: #1a1a2e;
+}
+
+.exito-msg {
+  color: #1a1a2e;
+  background-color: #f5f5f5;
+  border: 1px solid #d0d0d8;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+}
+/* ============================================
+   FILTRAR Y ORDENAR — components/FilterSort.jsx
+   Panel lateral con chips de filtros aplicados,
+   orden por precio/novedades, checkboxes de color
+   y slider de rango de precio.
+   ============================================ */
+
+/* el panel en sí, separado de las cards con un borde a la derecha */
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 450px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  padding: 1.5rem;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  /* sin max-height ni overflow-y */
+}
+/* título "Filtrar y ordenar" + botón "Borrar todo", uno a cada lado */
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.filter-header button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #1a1a2e;
+}
+
+/* fila de chips (categoría, subcategoría, colores activos) */
+.applied-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* cada chip individual, tipo pastilla con borde */
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid #1a1a2e;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+/* la "X" para sacar el chip */
+.chip button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+/* contenedor de los dos sliders de precio, superpuestos */
+.price-range {
+  position: relative;
+  height: 30px;
+}
+
+.price-range input[type="range"] {
+  position: absolute;
+  width: 100%;
+  top: 10px;
+}
+
+/* números de precio mínimo/máximo, debajo del slider */
+.price-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* en mobile: el panel pasa a estar arriba de las cards, no al costado */
+@media (max-width: 900px) {
+  .categoria-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-panel {
+    border-right: none;
+    border-bottom: 1px solid #e8e8ec;
+    padding-right: 0;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/*BOTON DE FILTRO */
+.categoria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.btn-abrir-filtros {
+  border: 1px solid #1a1a2e;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-abrir-filtros:hover {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+/* ============================================
+   PANEL DE FILTROS — deslizante, igual patrón que el carrito
+   ============================================ */
+
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+}
+
+.filter-panel.activo {
+  transform: translateX(0);
+}
+
+.categoria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.btn-abrir-filtros {
+  border: 1px solid #1a1a2e;
+  background: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-abrir-filtros:hover {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+.filter-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-header-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #1a1a2e;
+  text-decoration: none;
+}
+
+.filter-header-actions button:last-child {
+  font-size: 1.1rem;
+  padding: 0 0.3rem;
+}
+/* labels de radio/checkbox: cada uno en su propia línea, con espacio */
+.filter-panel label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-panel label:last-child {
+  margin-bottom: 0;
+}
+
+/* checkboxes: más grandes y cuadrados (ya lo son por defecto, esto los agranda) */
+.filter-panel input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #1a1a2e;
+}
+
+/* radios: más grandes, sin tocar la forma redonda (son de "Ordenar por") */
+.filter-panel input[type="radio"] {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #1a1a2e;
+}
+/* ============================================
+   MENÚ DE USUARIO — components/UserMenu.jsx
+   ============================================ */
+
+.user-menu {
+  position: relative;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 150%;
+  right: 0;
+  background-color: #ffffff;
+  min-width: 240px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  z-index: 200;
+}
+
+.user-dropdown-info {
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.user-name {
+  font-weight: 700;
+  color: #1a1a2e;
+  font-size: 0.9rem;
+}
+
+.user-email {
+  color: #a0a0b0;
+  font-size: 0.8rem;
+}
+
+.dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.85rem;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  color: #e94560;
+}
+
+.dropdown-btn {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #1a1a2e;
+  background-color: #ffffff;
+  color: #1a1a2e;
+  transition: all 0.3s ease;
+  margin-top: 0.8rem;
+}
+
+.dropdown-btn-dark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.dropdown-btn-dark:hover {
+  background-color: #e94560;
+  border-color: #e94560;
+}
+/*SVG DE USER*/
+.user-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  color: #070707;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.user-btn:hover {
+  background-color: rgba(68, 56, 56, 0.15);
+}
+.nav-icon {
+  height: 26px;
+  width: 26px;
+  margin-top: 4px;
+}
+/* ============================================
+   CARRITO — ENVÍO GRATIS
+   components/CarritoPanel.jsx
+   ============================================ */
+
+.free-shipping-info {
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: #1a1a2e;
+}
+
+.free-shipping-done {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #02f865;
+  transition: width 0.3s ease;
+}
+
+/* ============================================
+   CARRITO — ESTADO VACÍO
+   components/CarritoPanel.jsx
+   ============================================ */
+
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 4rem;
+  color: #a0a0b0;
+  text-align: center;
+}
+
+.empty-cart svg {
+  opacity: 0.5;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #a0a0b0;
+  margin-top: 0.4rem;
+}
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  width: fit-content;
+}
+.quantity-controls span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 16px;
+  text-align: center;
+}
+
+.btn-decrease,
+.btn-increase {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-decrease {
+  background-color: #ffffff;
+  color: #1a1a2e;
+  border: 1px solid #d0d0d8;
+}
+
+.btn-decrease:hover {
+  background-color: #e8e8ec;
+}
+
+.btn-increase {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.btn-increase:hover {
+  background-color: #e94560;
+}
+/* ============================================
+   CHECKOUT — pages/checkout/CheckoutPage.jsx
+   ============================================ */
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  width: 100%;
+}
+
+.checkout-items h1 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.items-count {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #a0a0b0;
+}
+
+.checkout-item {
+  display: flex;
+  gap: 1rem;
+  border: 1px solid #e8e8ec;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-item-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.checkout-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.checkout-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.checkout-detalle {
+  font-size: 0.85rem;
+  color: #a0a0b0;
+}
+
+.checkout-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.checkout-summary {
+  border: 1px solid #e8e8ec;
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 90px;
+}
+
+.checkout-summary h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
+  color: #16213e;
+}
+
+.shipping-hint {
+  font-size: 0.8rem;
+  color: #1a1a2e;
+  background-color: #f5f5f5;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.promo-code {
+  border-top: 1px solid #e8e8ec;
+  padding: 0.8rem 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.promo-code summary {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.promo-input {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.6rem;
+  border: 1px solid #d0d0d8;
+  font-size: 0.85rem;
+}
+
+.summary-total {
+  border-top: 1px solid #e8e8ec;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1a1a2e;
+}
+
+.payment-icons {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.payment-label {
+  font-size: 0.75rem;
+  color: #a0a0b0;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.payment-logos {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   CHECKOUT — ESTADO VACÍO
+   ============================================ */
+
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-page-empty {
+  align-items: flex-start;
+  margin-left: 80px;
+  margin-top: 20px;
+}
+.checkout-page-empty h1 {
+  color: black;
+  font-size: 45px;
+}
+.empty-checkout {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6rem;
+  margin-left: 60px;
+  color: #a0a0b0;
+}
+
+.empty-checkout svg {
+  opacity: 0.5;
+}
+
+.empty-cart-title {
+  font-weight: 700;
+  color: black;
+  margin-top: 3rem;
+}
+
+.empty-cart-subtitle {
+  font-size: 0.85rem;
+  color: black;
+  margin-top: 3rem;
+}
+
+.btn-empezar {
+  margin-top: 1rem;
+  padding: 0.7rem 2rem;
+  background-color: #1a1a2e;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-empezar:hover {
+  background-color: #e94560;
+}
+
+/* ============================================
+   CHECKOUT — RECOMENDACIONES
+   ============================================ */
+
+.checkout-recommendations {
+  margin-top: 3rem;
+  border-top: 1px solid #e8e8ec;
+  padding-top: 2rem;
+}
+
+.checkout-recommendations h2 {
+  font-size: 2rem;
+  margin-left: 90px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   GRILLA CHICA
+   ============================================ */
+
+.cards-grid-small {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  width: 70%;
+}
+
+.cards-grid-small .producto-card {
+  padding-inline: 0.75rem;
+}
+
+.cards-grid-small .producto-card img {
+  aspect-ratio: 1 / 1;
+  height: auto;
+}
+
+.cards-grid-small .producto-info h3 {
+  font-size: 0.8rem;
+}
+
+.cards-grid-small .producto-info .precio {
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cards-grid-small {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-grid-small {
+    grid-template-columns: 1fr;
+  }
+}
+.login-gate {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.login-gate p {
+  font-size: 0.85rem;
+  color: #a0a0b0;
+  margin-bottom: 0.8rem;
+}
+.btn-google-checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  background-color: #1a1a2e;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-google-checkout:hover {
+  background-color: #e94560;
+}
+/* ============================================
+   ORDER CONFIRMATION — pages/orderconfirmation/OrderConfirmation.jsx
+   ============================================ */
+
+.order-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.order-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-section {
+  border: 1px solid #e8e8ec;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.order-section h2 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-user-email {
+  font-size: 0.9rem;
+  color: #16213e;
+}
+
+.order-summary-item {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.order-summary-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.order-summary-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.order-summary-item .precio {
+  margin-left: auto;
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   ORDER SUCCESS — card centrada con tilde
+   ============================================ */
+
+.order-success-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+.order-success-card {
+  background-color: #ffffff;
+  padding: 3rem 2.5rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 420px;
+  animation: fade-in-scale 0.3s ease;
+}
+
+.order-success-card svg {
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.order-success-card h1 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.order-id {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+}
+
+.redirect-hint {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #a0a0b0;
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .order-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.order-section.locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.locked-hint {
+  font-size: 0.85rem;
+  color: #a0a0b0;
+}
+
+.summary-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #1a1a2e;
+}
+
+.delivery-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #e8e8ec;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delivery-option.activo {
+  border-color: #1a1a2e;
+  background-color: #f5f5f5;
+}
+
+.delivery-option div {
+  flex: 1;
+}
+
+.delivery-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.delivery-detail {
+  font-size: 0.8rem;
+  color: #a0a0b0;
+}
+
+.delivery-price {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: #e94560;
+  margin-top: 0.2rem;
+}
