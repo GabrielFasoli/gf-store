@@ -1,0 +1,372 @@
+@use "variables" as *;
+
+.cart-btn {
+  border-radius: 40%;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(68, 56, 56, 0.15);
+  }
+}
+
+.cart-badge {
+  position: absolute;
+  top: -1px;
+  right: -7px;
+  background-color: $color-accent;
+  color: $color-white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  &.visible {
+    display: flex;
+  }
+}
+
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  background-color: $color-white;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+
+  &.active {
+    transform: translateX(0);
+  }
+
+  .panel-header {
+    h2 {
+      font-size: 1.5rem;
+      color: $color-dark;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: $color-gray;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+  }
+
+  #cartItems {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #cartFooter {
+    border-top: 2px solid $color-bg-light;
+    padding-top: 1rem;
+
+    .total-price span {
+      color: $color-accent;
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #d8d5d5;
+  margin: -1.5rem -1.5rem 1rem;
+  padding: 1.5rem;
+  border-bottom: 2px solid $color-border;
+}
+
+.total-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $color-dark;
+  text-align: left;
+}
+
+// ============================================
+// CART ITEM — components/ProductsCart.jsx
+// ============================================
+
+.cart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.8rem;
+  border-radius: 12px;
+  background-color: $color-bg-light;
+
+  &-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    h3 {
+      font-size: 0.85rem;
+      color: $color-dark;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  &-body {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  &-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: $color-white;
+    border-radius: 8px;
+  }
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .price {
+    font-size: 0.9rem;
+    color: $color-accent;
+    font-weight: 600;
+  }
+}
+
+.btn-trash {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $color-gray;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: $color-accent;
+  }
+}
+
+// ============================================
+// QUANTITY CONTROLS — +/-
+// ============================================
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: $color-white;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  width: fit-content;
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: center;
+  }
+}
+
+.btn-decrease,
+.btn-increase {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-decrease {
+  background-color: $color-white;
+  color: $color-dark;
+  border: 1px solid $color-border-light;
+
+  &:hover {
+    background-color: $color-border;
+  }
+}
+
+.btn-increase {
+  background-color: $color-dark;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+}
+
+.empty-cart {
+  text-align: center;
+  margin-top: 2rem;
+  color: #0f0f0f;
+  font-size: 1rem;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 150;
+
+  &.active {
+    display: block;
+  }
+}
+
+// ============================================
+// CART — FREE SHIPPING
+// components/CartPanel.jsx
+// ============================================
+
+.free-shipping-info {
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: $color-dark;
+}
+
+.free-shipping-done {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $color-dark;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: $color-bg-light;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #02f865;
+  transition: width 0.3s ease;
+}
+
+// ============================================
+// CART — EMPTY STATE
+// components/CartPanel.jsx
+// (this duplicate .empty-cart / .quantity-controls / .btn-decrease /
+// .btn-increase definition overrides properties from the blocks
+// above — preserved in the same order so the visual result,
+// e.g. the quantity-controls background color, stays identical)
+// ============================================
+
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 4rem;
+  color: $color-gray;
+  text-align: center;
+
+  svg {
+    opacity: 0.5;
+  }
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: $color-gray;
+  margin-top: 0.4rem;
+}
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: $color-bg-light;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  width: fit-content;
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: center;
+  }
+}
+
+.btn-decrease,
+.btn-increase {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-decrease {
+  background-color: $color-white;
+  color: $color-dark;
+  border: 1px solid $color-border-light;
+
+  &:hover {
+    background-color: $color-border;
+  }
+}
+
+.btn-increase {
+  background-color: $color-dark;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+}

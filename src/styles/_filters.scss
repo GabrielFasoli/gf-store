@@ -1,0 +1,218 @@
+@use "variables" as *;
+
+// ============================================
+// FILTER AND SORT — components/FilterSort.jsx
+// Side panel with chips for applied filters,
+// sort by price/newest, color checkboxes
+// and a price range slider.
+// ============================================
+
+/* the panel itself, separated from the cards by a right border */
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 450px;
+  height: 100vh;
+  background-color: $color-white;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  padding: 1.5rem;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  /* no max-height or overflow-y */
+}
+/* "Filtrar y ordenar" title + "Borrar todo" button, one on each side */
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $color-dark;
+  }
+
+  button {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: $color-dark;
+  }
+}
+
+/* row of chips (category, subcategory, active colors) */
+.applied-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* each individual chip, pill-shaped with a border */
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid $color-dark;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+
+  /* the "X" to remove the chip */
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+}
+
+/* container for the two overlapping price sliders */
+.price-range {
+  position: relative;
+  height: 30px;
+
+  input[type="range"] {
+    position: absolute;
+    width: 100%;
+    top: 10px;
+  }
+}
+
+/* min/max price numbers, below the slider */
+.price-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* on mobile: the panel sits above the cards instead of beside them */
+@media (max-width: 900px) {
+  .category-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-panel {
+    border-right: none;
+    border-bottom: 1px solid $color-border;
+    padding-right: 0;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* FILTER BUTTON */
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.btn-open-filters {
+  border: 1px solid $color-dark;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $color-dark;
+    color: $color-white;
+  }
+}
+
+// ============================================
+// FILTER PANEL — slide-in, same pattern as the cart
+// (this duplicate definition in the original CSS overrides
+// the width/behavior above — preserved in the same order)
+// ============================================
+
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 100vh;
+  background-color: $color-white;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  overflow-y: auto;
+  padding: 1.5rem;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+
+  &.active {
+    transform: translateX(0);
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: $color-dark;
+  }
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.btn-open-filters {
+  border: 1px solid $color-dark;
+  background: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $color-dark;
+    color: $color-white;
+  }
+}
+.filter-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: $color-dark;
+    text-decoration: none;
+
+    &:last-child {
+      font-size: 1.1rem;
+      padding: 0 0.3rem;
+    }
+  }
+}

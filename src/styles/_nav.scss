@@ -1,3 +1,121 @@
+@use "variables" as *;
+
+// ============================================
+// USER MENU — components/UserMenu.jsx
+// ============================================
+
+.user-menu {
+  position: relative;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 150%;
+  right: 0;
+  background-color: $color-white;
+  min-width: 240px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  z-index: 200;
+}
+
+.user-dropdown-info {
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid $color-bg-light;
+}
+
+.user-name {
+  font-weight: 700;
+  color: $color-dark;
+  font-size: 0.9rem;
+}
+
+.user-email {
+  color: $color-gray;
+  font-size: 0.8rem;
+}
+
+.dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid $color-bg-light;
+  font-size: 0.85rem;
+  color: $color-dark;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-accent;
+  }
+}
+
+.dropdown-btn {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid $color-dark;
+  background-color: $color-white;
+  color: $color-dark;
+  transition: all 0.3s ease;
+  margin-top: 0.8rem;
+}
+
+.dropdown-btn-dark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background-color: $color-dark;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-accent;
+    border-color: $color-accent;
+  }
+}
+
+/* USER SVG */
+.user-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  color: #070707;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(68, 56, 56, 0.15);
+  }
+}
+.nav-icon {
+  height: 26px;
+  width: 26px;
+  margin-top: 4px;
+}
+
+// ============================================
+// NAVBAR — components/Nav/Nav.jsx, DesktopNav.jsx, MobileNav.jsx
+// (formerly Nav.css — loaded after everything else, same as
+// before, so it keeps winning the cascade on .cart-btn/.cart-badge)
+// ============================================
+
 .navbar {
   position: relative;
   z-index: 100;
@@ -5,17 +123,17 @@
   align-items: center;
   min-height: 76px;
   padding: 0 2rem;
-  background-color: #1a1d1a;
+  background-color: $color-navbar-bg;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
-}
 
-.navbar-logo img {
-  display: block;
-  width: 220px;
+  img {
+    display: block;
+    width: 220px;
+  }
 }
 
 .navbar-links {
@@ -28,9 +146,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
-}
-.navbar-links a {
-  color: rgb(255, 240, 240);
+
+  a {
+    color: rgb(255, 240, 240);
+  }
 }
 
 /*

@@ -1,4 +1,3 @@
-import "./index.css";
 import { Home } from "./pages/home/Home.jsx";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav/Nav.jsx";

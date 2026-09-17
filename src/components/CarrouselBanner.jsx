@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import "../index.css";
 export const CarrouselBanner = ({ products, tag }) => {
   const [position, setPosition] = useState(0);
   const carouselProducts = products.slice(position, position + 3);

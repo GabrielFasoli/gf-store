@@ -1,0 +1,304 @@
+@use "variables" as *;
+
+// ============================================
+// CHECKOUT — pages/checkout/CheckoutPage.jsx
+// ============================================
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  width: 100%;
+}
+
+.checkout-items h1 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.items-count {
+  font-size: 1rem;
+  font-weight: 400;
+  color: $color-gray;
+}
+
+.checkout-item {
+  display: flex;
+  gap: 1rem;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  &-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: $color-bg-light;
+    border-radius: 8px;
+  }
+
+  &-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  &-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+}
+
+.checkout-detail {
+  font-size: 0.85rem;
+  color: $color-gray;
+}
+
+.checkout-summary {
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 90px;
+
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
+  color: $color-text-secondary;
+}
+
+.shipping-hint {
+  font-size: 0.8rem;
+  color: $color-dark;
+  background-color: $color-bg-light;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.promo-code {
+  border-top: 1px solid $color-border;
+  padding: 0.8rem 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  summary {
+    font-weight: 600;
+    color: $color-dark;
+  }
+}
+
+.promo-input {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.6rem;
+  border: 1px solid $color-border-light;
+  font-size: 0.85rem;
+}
+
+.summary-total {
+  border-top: 1px solid $color-border;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: $color-dark;
+}
+
+.payment-icons {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.payment-label {
+  font-size: 0.75rem;
+  color: $color-gray;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.payment-logos {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+// ============================================
+// CHECKOUT — EMPTY STATE
+// ============================================
+
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-page-empty {
+  align-items: flex-start;
+  margin-left: 80px;
+  margin-top: 20px;
+
+  h1 {
+    color: black;
+    font-size: 45px;
+  }
+}
+.empty-checkout {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6rem;
+  margin-left: 60px;
+  color: $color-gray;
+
+  svg {
+    opacity: 0.5;
+  }
+}
+
+.empty-cart-title {
+  font-weight: 700;
+  color: black;
+  margin-top: 3rem;
+}
+
+.empty-cart-subtitle {
+  font-size: 0.85rem;
+  color: black;
+  margin-top: 3rem;
+}
+
+.btn-start {
+  margin-top: 1rem;
+  padding: 0.7rem 2rem;
+  background-color: $color-dark;
+  color: $color-white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+}
+
+// ============================================
+// CHECKOUT — RECOMMENDATIONS
+// ============================================
+
+.checkout-recommendations {
+  margin-top: 3rem;
+  border-top: 1px solid $color-border;
+  padding-top: 2rem;
+
+  h2 {
+    font-size: 2rem;
+    margin-left: 90px;
+    font-weight: 700;
+    color: $color-dark;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// ============================================
+// SMALL GRID
+// (this duplicate .cards-grid-small definition overrides the one
+// in _product-detail.scss — preserved in the same relative order,
+// since _checkout.scss is @use'd after _product-detail.scss)
+// ============================================
+
+.cards-grid-small {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  width: 70%;
+
+  .product-card {
+    padding-inline: 0.75rem;
+
+    img {
+      aspect-ratio: 1 / 1;
+      height: auto;
+    }
+  }
+
+  .product-info {
+    h3 {
+      font-size: 0.8rem;
+    }
+
+    .price {
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// ============================================
+// RESPONSIVE
+// ============================================
+
+@media (max-width: 900px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cards-grid-small {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-grid-small {
+    grid-template-columns: 1fr;
+  }
+}
+.login-gate {
+  text-align: center;
+  padding: 1rem 0;
+
+  p {
+    font-size: 0.85rem;
+    color: $color-gray;
+    margin-bottom: 0.8rem;
+  }
+}
+.btn-google-checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  background-color: $color-dark;
+  color: $color-white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+}

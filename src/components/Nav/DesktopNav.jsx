@@ -4,7 +4,6 @@ import logo from "../../assets/logo.svg";
 import { UserMenu } from "../UserMenu";
 import { useAuth } from "../../context/AuthContext";
 import { ADMIN_EMAILS } from "../../config/admins";
-import "./Nav.css";
 
 export const DesktopNav = ({ cart, toggleCart }) => {
   const { user } = useAuth();

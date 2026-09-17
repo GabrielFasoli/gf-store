@@ -1,0 +1,82 @@
+@use "variables" as *;
+
+// ============================================
+// ADMIN PANEL — pages/adminPanel/CreateProduct.jsx
+// ============================================
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 600px;
+  margin-top: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $color-dark;
+  }
+
+  input,
+  textarea {
+    padding: 0.7rem;
+    border: 1px solid $color-border-light;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $color-dark;
+    }
+  }
+}
+
+.image-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    background: none;
+    border: 1px solid $color-accent;
+    color: $color-accent;
+    padding: 0 0.7rem;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+}
+
+.btn-add-image {
+  background: none;
+  border: 1px dashed $color-gray;
+  color: $color-gray;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  width: 100%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $color-dark;
+    color: $color-dark;
+  }
+}
+
+.success-msg {
+  color: $color-dark;
+  background-color: $color-bg-light;
+  border: 1px solid $color-border-light;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+}

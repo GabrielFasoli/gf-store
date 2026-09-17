@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "../index.css";
 export const Banner = ({ position, title, subtitle, image, buttons }) => {
   return (
     <section className="banner-style">

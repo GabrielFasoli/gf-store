@@ -1,0 +1,16 @@
+// Main stylesheet — pulls in every partial with @use.
+// Order matters here: it mirrors the order these rules used to
+// appear across index.css and Nav.css, so the CSS cascade (and a
+// handful of intentional duplicate selectors that override each
+// other) behaves exactly the same as before the Sass migration.
+
+@use "variables";
+@use "base";
+@use "home";
+@use "product-detail";
+@use "admin";
+@use "filters";
+@use "cart";
+@use "checkout";
+@use "order-confirmation";
+@use "nav";

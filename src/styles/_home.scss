@@ -1,0 +1,249 @@
+@use "variables" as *;
+
+// ============================================
+// BANNER — component components/Banner.jsx
+// ============================================
+
+.banner-style {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 800px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.banner-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+.banner-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* --- title, by position --- */
+.title-left-bottom,
+.title-left-top,
+.title-center {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: $color-white;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.4rem 0.8rem;
+  width: fit-content;
+}
+
+/* --- subtitle, by position --- */
+.subtitle-left-bottom,
+.subtitle-left-top,
+.subtitle-center {
+  font-size: 1rem;
+  font-weight: 400;
+  color: $color-dark;
+  background-color: $color-white;
+  padding: 0.4rem 0.8rem;
+  width: fit-content;
+}
+
+/* --- button, by position --- */
+.banner-btn-left-bottom,
+.banner-btn-left-top,
+.banner-btn-center {
+  background-color: $color-white;
+  color: $color-dark;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.banner-btn-left-bottom:hover,
+.banner-btn-left-top:hover,
+.banner-btn-center:hover {
+  background-color: $color-dark;
+  color: $color-white;
+}
+
+/* --- position of the overall container --- */
+.position-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  text-align: center;
+}
+
+.position-left-bottom {
+  bottom: 2rem;
+  left: 2rem;
+}
+
+.position-left-top {
+  top: 2rem;
+  left: 2rem;
+}
+
+// ============================================
+// FEATURED PRODUCTS CAROUSEL
+// components/CarrouselCard.jsx
+// ============================================
+
+.carousel-looks-cards {
+  position: relative;
+  padding: 0 0 2rem;
+  width: 100%;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ============================================
+// "SHOP THE LOOK" CAROUSEL — CarrouselBanner + CarrouselCard
+// ============================================
+
+.carousel-looks-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 0rem 0.5rem;
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: $color-dark;
+  }
+
+  a {
+    border: 1px solid $color-dark;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: $color-dark;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: $color-dark;
+      color: $color-white;
+    }
+  }
+}
+
+.carousel-looks {
+  position: relative;
+}
+
+.looks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+/* ANIMATION */
+@keyframes carousel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.carousel-card {
+  overflow: hidden;
+  animation: carousel-fade-in 0.2s ease;
+
+  img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    transition: transform 1s ease;
+  }
+}
+
+/* --- navigation buttons, floating over the photos --- */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid black;
+  width: 44px;
+  height: 44px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 2;
+
+  &:hover {
+    background-color: $color-dark;
+    color: $color-white;
+  }
+
+  &:first-of-type {
+    left: 0rem;
+  }
+
+  &:last-of-type {
+    right: 0rem;
+  }
+
+  &.oculto {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .looks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .carousel-card img {
+    height: 450px;
+  }
+}
+
+@media (max-width: 500px) {
+  .looks-grid {
+    grid-template-columns: 1fr;
+  }
+}

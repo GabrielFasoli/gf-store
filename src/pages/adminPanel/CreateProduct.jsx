@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { addProducts } from "../../service/products.js";
-import "../../index.css";
 
 const emptyProduct = {
   brand: "",
