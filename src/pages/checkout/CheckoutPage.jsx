@@ -1,100 +1,100 @@
 import { useNavigate } from "react-router-dom";
-import { formatearPrecio } from "../../logic/utils.js";
+import { formatPrice } from "../../logic/utils.js";
 import { FREE_SHIPPING_THRESHOLD } from "../../config/shipping.js";
 import { useState, useEffect } from "react";
 import { ProductsCards } from "../../components/ProductsCards.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { loginConGoogle } from "../../firebase/auth.js";
+import { loginWithGoogle } from "../../firebase/auth.js";
 
 export function CheckoutPage({
-  carrito,
-  sumarProducts,
-  restarProducts,
-  eliminarProductos,
-  calcularTotal,
-  productos,
+  cart,
+  increaseProduct,
+  decreaseProduct,
+  removeProduct,
+  calculateTotal,
+  products,
 }) {
   const { user } = useAuth();
 
-  const handlePagar = async () => {
+  const handlePay = async () => {
     if (!user) return;
     navigate("/order-confirmation");
   };
 
   const handleLoginCheckout = async () => {
     try {
-      await loginConGoogle();
+      await loginWithGoogle();
     } catch (error) {
       console.error(error);
     }
   };
-  const [recomendados, setRecomendados] = useState([]);
+  const [recommended, setRecommended] = useState([]);
 
   useEffect(() => {
-    if (productos.length > 0) {
-      setRecomendados(
-        [...productos].sort(() => Math.random() - 0.5).slice(0, 4),
+    if (products.length > 0) {
+      setRecommended(
+        [...products].sort(() => Math.random() - 0.5).slice(0, 4),
       );
     }
-  }, [productos]);
+  }, [products]);
   const navigate = useNavigate();
-  const total = calcularTotal();
+  const total = calculateTotal();
   const shippingCost = total >= FREE_SHIPPING_THRESHOLD ? 0 : 4500;
   const finalTotal = total + shippingCost;
 
-  if (carrito.length === 0) {
+  if (cart.length === 0) {
     return (
       <main className="checkout-page">
         <div className="checkout-page-empty">
           <h1>
             Tu carrito{" "}
             <span className="items-count">
-              ({carrito.length} producto{carrito.length !== 1 ? "s" : ""})
+              ({cart.length} producto{cart.length !== 1 ? "s" : ""})
             </span>
           </h1>
           <p className="empty-cart-title">Tu carrito está vacío</p>
           <p className="empty-cart-subtitle">
             Una vez que añadas algo a tu carrito, aparecerá acá.
           </p>
-          <button className="btn-empezar" onClick={() => navigate("/")}>
+          <button className="btn-start" onClick={() => navigate("/")}>
             Empezar
           </button>
         </div>
         <section className="checkout-recommendations">
           <h2>Nuestras recomendaciones</h2>
           <div className="cards-grid-small">
-            <ProductsCards products={recomendados} />
+            <ProductsCards products={recommended} />
           </div>
         </section>
       </main>
     );
   }
   return (
-    <main className="contenedor-main checkout-page">
+    <main className="main-container checkout-page">
       <div className="checkout-grid">
         <div className="checkout-items">
           <h1>
             Tu carrito{" "}
             <span className="items-count">
-              ({carrito.length} producto{carrito.length !== 1 ? "s" : ""})
+              ({cart.length} producto{cart.length !== 1 ? "s" : ""})
             </span>
           </h1>
 
-          {carrito.map((producto) => (
-            <div className="checkout-item" key={producto.id}>
+          {cart.map((product) => (
+            <div className="checkout-item" key={product.id}>
               <img
-                src={producto.images[0]}
-                alt={producto.name}
+                src={product.images[0]}
+                alt={product.name}
                 className="checkout-item-img"
               />
 
               <div className="checkout-item-info">
                 <div className="checkout-item-header">
-                  <h3>{producto.name}</h3>
+                  <h3>{product.name}</h3>
                   <button
-                    onClick={() => eliminarProductos(producto.id)}
-                    className="btn-basura"
-                    aria-label={`Eliminar ${producto.name}`}
+                    onClick={() => removeProduct(product.id)}
+                    className="btn-trash"
+                    aria-label={`Eliminar ${product.name}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -114,31 +114,31 @@ export function CheckoutPage({
                   </button>
                 </div>
 
-                {producto.color && (
-                  <p className="checkout-detalle">Color: {producto.color}</p>
+                {product.color && (
+                  <p className="checkout-detail">Color: {product.color}</p>
                 )}
-                {producto.talle && (
-                  <p className="checkout-detalle">Talle: {producto.talle}</p>
+                {product.size && (
+                  <p className="checkout-detail">Talle: {product.size}</p>
                 )}
 
                 <div className="checkout-item-footer">
                   <div className="quantity-controls">
                     <button
                       className="btn-decrease"
-                      onClick={() => restarProducts(producto.id)}
+                      onClick={() => decreaseProduct(product.id)}
                     >
                       −
                     </button>
-                    <span>{producto.cantidad}</span>
+                    <span>{product.quantity}</span>
                     <button
                       className="btn-increase"
-                      onClick={() => sumarProducts(producto.id)}
+                      onClick={() => increaseProduct(product.id)}
                     >
                       +
                     </button>
                   </div>
-                  <p className="precio">
-                    {formatearPrecio(producto.price * producto.cantidad)}
+                  <p className="price">
+                    {formatPrice(product.price * product.quantity)}
                   </p>
                 </div>
               </div>
@@ -151,19 +151,19 @@ export function CheckoutPage({
 
           <div className="summary-row">
             <span>Subtotal</span>
-            <span>{formatearPrecio(total)}</span>
+            <span>{formatPrice(total)}</span>
           </div>
 
           <div className="summary-row">
             <span>Envío</span>
             <span>
-              {shippingCost === 0 ? "Gratis" : formatearPrecio(shippingCost)}
+              {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
             </span>
           </div>
 
           {shippingCost > 0 && (
             <p className="shipping-hint">
-              🚚 Te faltan {formatearPrecio(FREE_SHIPPING_THRESHOLD - total)}{" "}
+              🚚 Te faltan {formatPrice(FREE_SHIPPING_THRESHOLD - total)}{" "}
               para envío gratis
             </p>
           )}
@@ -179,11 +179,11 @@ export function CheckoutPage({
 
           <div className="summary-row summary-total">
             <span>Total</span>
-            <span>{formatearPrecio(finalTotal)}</span>
+            <span>{formatPrice(finalTotal)}</span>
           </div>
 
           {user ? (
-            <button className="btnAgregaar" onClick={handlePagar}>
+            <button className="btnAdd" onClick={handlePay}>
               Ir a pagar
             </button>
           ) : (
@@ -244,7 +244,7 @@ export function CheckoutPage({
       <section className="checkout-recommendations">
         <h2>Nuestras recomendaciones</h2>
         <div className="cards-grid-small">
-          <ProductsCards products={recomendados} />
+          <ProductsCards products={recommended} />
         </div>
       </section>
     </main>

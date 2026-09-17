@@ -1,15 +1,15 @@
 export function Stars({ rating, reviewsCount }) {
   if (!rating) return null;
 
-  const llenas = Math.round(rating);
+  const filled = Math.round(rating);
 
   return (
-    <div className="estrellas">
-      <span className="estrellas-iconos">
-        {"★".repeat(llenas)}
-        {"☆".repeat(5 - llenas)}
+    <div className="stars">
+      <span className="stars-icons">
+        {"★".repeat(filled)}
+        {"☆".repeat(5 - filled)}
       </span>
-      <span className="estrellas-texto">
+      <span className="stars-text">
         {rating} {reviewsCount && `(${reviewsCount})`}
       </span>
     </div>

@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { ProductsCards } from "./ProductsCards.jsx";
-export const CarrouselCard = ({ productos }) => {
+export const CarrouselCard = ({ products }) => {
   const [position, setPosition] = useState(0);
-  const productosCarrousel = productos.slice(position, position + 4);
+  const carouselProducts = products.slice(position, position + 4);
 
-  const posicionMaxima = Math.max(productos.length - 4, 0);
-  const esInicio = position === 0;
-  const esFinal = position >= posicionMaxima;
+  const maxPosition = Math.max(products.length - 4, 0);
+  const isStart = position === 0;
+  const isEnd = position >= maxPosition;
 
-  const avanzar = () => {
-    setPosition(Math.min(position + 4, posicionMaxima));
+  const next = () => {
+    setPosition(Math.min(position + 4, maxPosition));
   };
 
-  const retroceder = () => {
+  const prev = () => {
     setPosition(Math.max(position - 4, 0));
   };
   return (
@@ -23,19 +23,19 @@ export const CarrouselCard = ({ productos }) => {
 
       <div className="carousel-looks-cards">
         <button
-          className={`carousel-btn ${esInicio ? "oculto" : ""}`}
-          onClick={retroceder}
+          className={`carousel-btn ${isStart ? "oculto" : ""}`}
+          onClick={prev}
         >
           ←
         </button>
 
         <div className="cards-grid">
-          <ProductsCards products={productosCarrousel} />
+          <ProductsCards products={carouselProducts} />
         </div>
 
         <button
-          className={`carousel-btn ${esFinal ? "oculto" : ""}`}
-          onClick={avanzar}
+          className={`carousel-btn ${isEnd ? "oculto" : ""}`}
+          onClick={next}
         >
           →
         </button>

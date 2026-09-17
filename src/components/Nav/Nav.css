@@ -34,8 +34,8 @@
 }
 
 /*
-  position: static hace que el mega menú se posicione
-  respecto a .navbar y no respecto a cada link.
+  position: static makes the mega menu position itself
+  relative to .navbar instead of relative to each link.
 */
 .nav-item {
   position: static;
@@ -61,7 +61,7 @@
   border-bottom-color: #111;
 }
 
-/* Oculto hasta hacer hover sobre su categoría */
+/* Hidden until hovering over its category */
 .mega-menu {
   position: absolute;
   top: 100%;
@@ -76,9 +76,9 @@
 }
 
 /*
-  Como mega-menu está dentro de nav-item,
-  sigue visible al mover el mouse desde "Mujer"
-  hacia los links del panel.
+  Since mega-menu is inside nav-item,
+  it stays visible when moving the mouse from "Mujer"
+  towards the panel links.
 */
 .nav-item:hover .mega-menu {
   display: block;
@@ -121,7 +121,7 @@
   text-decoration: underline;
 }
 
-.carrito-btn {
+.cart-btn {
   position: relative;
   border: 0;
   background: transparent;
@@ -129,11 +129,11 @@
   font-size: 1.25rem;
 }
 
-.carrito-badge {
+.cart-badge {
   display: none;
 }
 
-.carrito-badge.visible {
+.cart-badge.visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +145,7 @@
   color: #fff;
   font-size: 0.7rem;
 }
-/*VISTA MOBILE */
+/* MOBILE VIEW */
 .mobile-nav {
   display: none;
 }
@@ -224,7 +224,7 @@
     background: #f8f8f8;
   }
 
-  .ver-todo-link {
+  .view-all-link {
     display: block;
     padding: 1rem 0;
     color: #000;

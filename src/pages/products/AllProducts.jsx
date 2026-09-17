@@ -2,9 +2,9 @@ import { ProductsCards } from "../../components/ProductsCards.jsx";
 
 export function AllProducts({ products }) {
   return (
-    <main className="contenedor-main">
+    <main className="main-container">
       <h1>Todos los productos</h1>
-      <section className="grilla-productos">
+      <section className="products-grid">
         {products.length > 0 ? (
           <ProductsCards products={products} />
         ) : (

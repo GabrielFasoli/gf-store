@@ -3,13 +3,13 @@ import { Home } from "./pages/home/Home.jsx";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav/Nav.jsx";
 import { useCard } from "./hooks/useCard.js";
-import { CarritoPanel } from "./components/carritoPanel.jsx";
+import { CartPanel } from "./components/CartPanel.jsx";
 import { useProducts } from "./hooks/useProducts.js";
 import { Outlet } from "./pages/outlet/Outlet.jsx";
-import { Deportes } from "./pages/deportes/Deportes.jsx";
-import { Mujer } from "./pages/mujer/Mujer.jsx";
-import { Hombre } from "./pages/hombre/Hombre.jsx";
-import { Niños } from "./pages/niños/Niños.jsx";
+import { Sports } from "./pages/sports/Sports.jsx";
+import { Women } from "./pages/women/Women.jsx";
+import { Men } from "./pages/men/Men.jsx";
+import { Kids } from "./pages/kids/Kids.jsx";
 import { ProductsDetails } from "./pages/productsdetails/ProductsDetails.jsx";
 import { Lookbook } from "./pages/looks/Lookbook.jsx";
 import { CreateProduct } from "./pages/adminPanel/CreateProduct.jsx";
@@ -21,63 +21,63 @@ import { AnnouncementBar } from "./components/AnnouncementBar.jsx";
 
 function App() {
   const location = useLocation();
-  const ocultarNav = location.pathname === "/order-confirmation";
+  const hideNav = location.pathname === "/order-confirmation";
   const { products } = useProducts();
   const {
-    carrito,
-    carritoAbierto,
-    agregarProductos,
-    sumarProducts,
-    restarProducts,
-    calcularTotal,
-    toggleCarrito,
-    eliminarProducto,
-    vaciarCarrito,
+    cart,
+    cartOpen,
+    addProduct,
+    increaseProduct,
+    decreaseProduct,
+    calculateTotal,
+    toggleCart,
+    removeProduct,
+    clearCart,
   } = useCard();
 
   return (
     <>
-      {!ocultarNav && <AnnouncementBar />}
-      {!ocultarNav && <Nav carrito={carrito} toggleCarrito={toggleCarrito} />}
+      {!hideNav && <AnnouncementBar />}
+      {!hideNav && <Nav cart={cart} toggleCart={toggleCart} />}
       <Routes>
         <Route
           path="/"
           element={
-            <Home products={products} agregarProductos={agregarProductos} />
+            <Home products={products} addProduct={addProduct} />
           }
         />
         <Route
           path="/mujer/:subcategoria?"
-          element={<Mujer productos={products} />}
+          element={<Women products={products} />}
         />
         <Route
           path="/hombre/:subcategoria?"
-          element={<Hombre productos={products} />}
+          element={<Men products={products} />}
         />
         <Route
           path="/ninos/:subcategoria?"
-          element={<Niños productos={products} />}
+          element={<Kids products={products} />}
         />
         <Route
           path="/deportes/:subcategoria?"
-          element={<Deportes productos={products} />}
+          element={<Sports products={products} />}
         />
         <Route
           path="/outlet/:subcategoria?"
-          element={<Outlet productos={products} />}
+          element={<Outlet products={products} />}
         />
         <Route
           path="/productsdetails/:id"
           element={
             <ProductsDetails
-              agregarAlCarrito={agregarProductos}
-              productos={products}
+              addToCart={addProduct}
+              products={products}
             />
           }
         />
         <Route
           path="/lookbook/:tag"
-          element={<Lookbook productos={products} />}
+          element={<Lookbook products={products} />}
         ></Route>
         <Route
           path="/admin"
@@ -95,12 +95,12 @@ function App() {
           path="/checkout"
           element={
             <CheckoutPage
-              carrito={carrito}
-              sumarProducts={sumarProducts}
-              restarProducts={restarProducts}
-              eliminarProductos={eliminarProducto}
-              calcularTotal={calcularTotal}
-              productos={products}
+              cart={cart}
+              increaseProduct={increaseProduct}
+              decreaseProduct={decreaseProduct}
+              removeProduct={removeProduct}
+              calculateTotal={calculateTotal}
+              products={products}
             />
           }
         />
@@ -108,23 +108,23 @@ function App() {
           path="/order-confirmation"
           element={
             <OrderConfirmation
-              carrito={carrito}
-              calcularTotal={calcularTotal}
-              vaciarCarrito={vaciarCarrito}
+              cart={cart}
+              calculateTotal={calculateTotal}
+              clearCart={clearCart}
             />
           }
         />
       </Routes>
 
-      {!ocultarNav && (
-        <CarritoPanel
-          carrito={carrito}
-          sumarProducts={sumarProducts}
-          restarProducts={restarProducts}
-          eliminarProductos={eliminarProducto}
-          carritoAbierto={carritoAbierto}
-          toggleCarrito={toggleCarrito}
-          calcularTotal={calcularTotal}
+      {!hideNav && (
+        <CartPanel
+          cart={cart}
+          increaseProduct={increaseProduct}
+          decreaseProduct={decreaseProduct}
+          removeProduct={removeProduct}
+          cartOpen={cartOpen}
+          toggleCart={toggleCart}
+          calculateTotal={calculateTotal}
         />
       )}
     </>

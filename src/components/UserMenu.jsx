@@ -1,19 +1,19 @@
 import { useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
-import { loginConGoogle, logout } from "../firebase/auth.js";
+import { loginWithGoogle, logout } from "../firebase/auth.js";
 import { useClickOutside } from "../hooks/useClickOutside.js";
 
 export function UserMenu() {
   const { user } = useAuth();
-  const [abierto, setAbierto] = useState(false);
+  const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
 
-  useClickOutside(menuRef, () => setAbierto(false));
+  useClickOutside(menuRef, () => setOpen(false));
 
   const handleGoogle = async () => {
     try {
-      await loginConGoogle();
-      setAbierto(false);
+      await loginWithGoogle();
+      setOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -21,7 +21,7 @@ export function UserMenu() {
 
   return (
     <div className="user-menu" ref={menuRef}>
-      <button className="user-btn" onClick={() => setAbierto(!abierto)}>
+      <button className="user-btn" onClick={() => setOpen(!open)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="26"
@@ -33,7 +33,7 @@ export function UserMenu() {
         </svg>
       </button>
 
-      {abierto && (
+      {open && (
         <div className="user-dropdown">
           {user ? (
             <>

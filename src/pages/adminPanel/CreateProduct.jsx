@@ -2,12 +2,12 @@ import { useState } from "react";
 import { addProducts } from "../../service/products.js";
 import "../../index.css";
 
-const productoVacio = {
+const emptyProduct = {
   brand: "",
   name: "",
   price: 0,
-  categoria: "",
-  subcategoria: "",
+  category: "",
+  subcategory: "",
   sport: "",
   tags: [],
   images: [""],
@@ -23,9 +23,9 @@ const productoVacio = {
 };
 
 export function CreateProduct() {
-  const [form, setForm] = useState(productoVacio);
+  const [form, setForm] = useState(emptyProduct);
   const [loading, setLoading] = useState(false);
-  const [exito, setExito] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,30 +33,30 @@ export function CreateProduct() {
   };
 
   const handleImageChange = (index, value) => {
-    const nuevasImages = [...form.images];
-    nuevasImages[index] = value;
-    setForm((prev) => ({ ...prev, images: nuevasImages }));
+    const newImages = [...form.images];
+    newImages[index] = value;
+    setForm((prev) => ({ ...prev, images: newImages }));
   };
 
-  const agregarImagen = () => {
+  const addImage = () => {
     setForm((prev) => ({ ...prev, images: [...prev.images, ""] }));
   };
 
-  const eliminarImagen = (index) => {
-    const nuevasImages = form.images.filter((_, i) => i !== index);
-    setForm((prev) => ({ ...prev, images: nuevasImages }));
+  const removeImage = (index) => {
+    const newImages = form.images.filter((_, i) => i !== index);
+    setForm((prev) => ({ ...prev, images: newImages }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const precioNum = Number(form.price);
+    const priceNum = Number(form.price);
     const stockNum = Number(form.stock);
     const ratingNum = Number(form.rating);
     const reviewsNum = Number(form.reviewsCount);
 
-    if (isNaN(precioNum) || precioNum <= 0) {
-      alert("El precio tiene que ser un número mayor a 0");
+    if (isNaN(priceNum) || priceNum <= 0) {
+      alert("El price tiene que ser un número mayor a 0");
       return;
     }
 
@@ -69,7 +69,7 @@ export function CreateProduct() {
     try {
       await addProducts({
         ...form,
-        price: precioNum,
+        price: priceNum,
         stock: stockNum,
         sport: form.sport,
         rating: ratingNum,
@@ -91,8 +91,8 @@ export function CreateProduct() {
           .filter(Boolean),
         images: form.images.filter(Boolean),
       });
-      setExito(true);
-      setForm(productoVacio);
+      setSuccess(true);
+      setForm(emptyProduct);
     } catch (error) {
       console.error(error);
       alert("Hubo un error al guardar el producto");
@@ -102,10 +102,10 @@ export function CreateProduct() {
   };
 
   return (
-    <main className="contenedor-main">
+    <main className="main-container">
       <h1>Agregar producto</h1>
 
-      {exito && <p className="exito-msg">✅ Producto cargado con éxito</p>}
+      {success && <p className="success-msg">✅ Producto cargado con éxito</p>}
 
       <form onSubmit={handleSubmit} className="admin-form">
         <div className="form-group">
@@ -158,24 +158,24 @@ export function CreateProduct() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="categoria">Categoría *</label>
+          <label htmlFor="category">Categoría *</label>
           <input
-            id="categoria"
-            name="categoria"
+            id="category"
+            name="category"
             placeholder="hombre, mujer, ninos, deportes, outlet"
-            value={form.categoria}
+            value={form.category}
             onChange={handleChange}
             required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="subcategoria">Subcategoría *</label>
+          <label htmlFor="subcategory">Subcategoría *</label>
           <input
-            id="subcategoria"
-            name="subcategoria"
+            id="subcategory"
+            name="subcategory"
             placeholder="remeras, zapatillas, camperas..."
-            value={form.subcategoria}
+            value={form.subcategory}
             onChange={handleChange}
             required
           />
@@ -313,7 +313,7 @@ export function CreateProduct() {
                 onChange={(e) => handleImageChange(index, e.target.value)}
               />
               {form.images.length > 1 && (
-                <button type="button" onClick={() => eliminarImagen(index)}>
+                <button type="button" onClick={() => removeImage(index)}>
                   ✕
                 </button>
               )}
@@ -321,14 +321,14 @@ export function CreateProduct() {
           ))}
           <button
             type="button"
-            className="btn-agregar-imagen"
-            onClick={agregarImagen}
+            className="btn-add-image"
+            onClick={addImage}
           >
             + Agregar imagen
           </button>
         </div>
 
-        <button type="submit" className="btnAgregaar" disabled={loading}>
+        <button type="submit" className="btnAdd" disabled={loading}>
           {loading ? "Guardando..." : "Guardar producto"}
         </button>
       </form>

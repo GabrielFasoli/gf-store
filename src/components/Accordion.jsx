@@ -1,16 +1,16 @@
 import { useState } from "react";
-export const Acordeon = ({ titulo, children }) => {
-  const [abierto, setAbierto] = useState(false);
+export const Accordion = ({ title, children }) => {
+  const [open, setOpen] = useState(false);
   return (
-    <div className="acordeon">
+    <div className="accordion">
       <button
-        className="acordeon-header"
-        onClick={() => setAbierto(!abierto)}
-        aria-expanded={abierto}
+        className="accordion-header"
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
       >
-        <span>{titulo}</span>
-        <span className="acordeon-icono">
-          {abierto ? (
+        <span>{title}</span>
+        <span className="accordion-icon">
+          {open ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -42,7 +42,7 @@ export const Acordeon = ({ titulo, children }) => {
         </span>
       </button>
 
-      {abierto && <div className="acordeon-contenido">{children}</div>}
+      {open && <div className="accordion-content">{children}</div>}
     </div>
   );
 };

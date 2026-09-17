@@ -1,21 +1,21 @@
 import { Link } from "react-router-dom";
 import "../index.css";
-export const Banner = ({ posicion, titulo, subtitulo, imagen, botones }) => {
+export const Banner = ({ position, title, subtitle, image, buttons }) => {
   return (
     <section className="banner-style">
-      <img src={imagen} alt={titulo} />
-      <div className={`banner-contenido posicion-${posicion}`}>
-        <h2 className={`titulo-${posicion}`}>{titulo}</h2>
-        {subtitulo && <h3 className={`subtitulo-${posicion}`}>{subtitulo}</h3>}
-        <div className="banner-botones">
-          {botones.map((btn) => {
+      <img src={image} alt={title} />
+      <div className={`banner-content posicion-${position}`}>
+        <h2 className={`titulo-${position}`}>{title}</h2>
+        {subtitle && <h3 className={`subtitulo-${position}`}>{subtitle}</h3>}
+        <div className="banner-buttons">
+          {buttons.map((btn) => {
             return (
               <Link
-                className={`banner-btn-${posicion}`}
+                className={`banner-btn-${position}`}
                 to={btn.link}
-                key={btn.titulo}
+                key={btn.title}
               >
-                {btn.titulo}{" "}
+                {btn.title}{" "}
               </Link>
             );
           })}

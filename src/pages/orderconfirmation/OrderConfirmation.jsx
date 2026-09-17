@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { createOrder } from "../../service/products.js";
-import { formatearPrecio } from "../../logic/utils.js";
+import { formatPrice } from "../../logic/utils.js";
 import { FREE_SHIPPING_THRESHOLD } from "../../config/shipping.js";
 
 const STANDARD_DELIVERY_COST = 10000;
 
-export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
+export function OrderConfirmation({ cart, calculateTotal, clearCart }) {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const total = calcularTotal();
+  const total = calculateTotal();
 
-  // Paso 1 — dirección (con localStorage)
+  // Step 1 — address (with localStorage)
   const [addressForm, setAddressForm] = useState(() => {
     const saved = localStorage.getItem("addressForm");
     return saved
@@ -34,11 +34,11 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
     return localStorage.getItem("addressForm") !== null;
   });
 
-  // Paso 2 — entrega
+  // Step 2 — delivery
   const [deliveryOption, setDeliveryOption] = useState("");
   const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
 
-  // Paso 3 — pago
+  // Step 3 — payment
   const [cardForm, setCardForm] = useState({
     name: "",
     number: "",
@@ -58,7 +58,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
     }
   }, [orderId]);
 
-  // ---------- Paso 1 ----------
+  // ---------- Step 1 ----------
   const handleAddressChange = (e) => {
     const { name, value, type, checked } = e.target;
     setAddressForm((prev) => ({
@@ -77,7 +77,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
     setAddressConfirmed(true);
   };
 
-  // ---------- Paso 2 ----------
+  // ---------- Step 2 ----------
   let deliveryCost;
   if (deliveryOption === "store") {
     deliveryCost = 0;
@@ -96,7 +96,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
     setDeliveryConfirmed(true);
   };
 
-  // ---------- Paso 3 ----------
+  // ---------- Step 3 ----------
   const handleCardChange = (e) => {
     const { name, value } = e.target;
     setCardForm((prev) => ({ ...prev, [name]: value }));
@@ -150,12 +150,12 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
         document: addressForm.document,
         deliveryOption,
         deliveryCost,
-        products: carrito.map((item) => ({
+        products: cart.map((item) => ({
           id: item.id,
           name: item.name,
-          talle: item.talle || null,
+          size: item.size || null,
           color: item.color || null,
-          cantidad: item.cantidad,
+          quantity: item.quantity,
           price: item.price,
         })),
         total: total + deliveryCost,
@@ -163,7 +163,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
 
       const { id } = await createOrder(orderData);
       setOrderId(id);
-      vaciarCarrito();
+      clearCart();
     } catch (err) {
       console.error(err);
       setError("Hubo un error al generar tu orden. Intentá de nuevo.");
@@ -172,7 +172,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
     }
   };
 
-  // ---------- Pantalla de éxito ----------
+  // ---------- Success screen ----------
   if (orderId) {
     return (
       <div className="order-success-overlay">
@@ -205,7 +205,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
   }
 
   return (
-    <main className="contenedor-main order-confirmation-page">
+    <main className="main-container order-confirmation-page">
       <div className="order-grid">
         <div className="order-form-col">
           <section className="order-section">
@@ -330,7 +330,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
                   Soy mayor de 18 años
                 </label>
 
-                <button type="submit" className="btnAgregaar">
+                <button type="submit" className="btnAdd">
                   Siguiente
                 </button>
               </form>
@@ -392,13 +392,13 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
                 <p>
                   {deliveryCost === 0
                     ? "Gratis"
-                    : formatearPrecio(deliveryCost)}
+                    : formatPrice(deliveryCost)}
                 </p>
               </div>
             ) : (
               <>
                 <label
-                  className={`delivery-option ${deliveryOption === "standard" ? "activo" : ""}`}
+                  className={`delivery-option ${deliveryOption === "standard" ? "active" : ""}`}
                 >
                   <input
                     type="radio"
@@ -413,12 +413,12 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
                   <span className="delivery-price">
                     {total >= FREE_SHIPPING_THRESHOLD
                       ? "Gratis"
-                      : formatearPrecio(STANDARD_DELIVERY_COST)}
+                      : formatPrice(STANDARD_DELIVERY_COST)}
                   </span>
                 </label>
 
                 <label
-                  className={`delivery-option ${deliveryOption === "pickup-point" ? "activo" : ""}`}
+                  className={`delivery-option ${deliveryOption === "pickup-point" ? "active" : ""}`}
                 >
                   <input
                     type="radio"
@@ -436,7 +436,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
                 </label>
 
                 <label
-                  className={`delivery-option ${deliveryOption === "store" ? "activo" : ""}`}
+                  className={`delivery-option ${deliveryOption === "store" ? "active" : ""}`}
                 >
                   <input
                     type="radio"
@@ -453,7 +453,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
                   <span className="delivery-price">Gratis</span>
                 </label>
 
-                <button className="btnAgregaar" onClick={handleDeliveryConfirm}>
+                <button className="btnAdd" onClick={handleDeliveryConfirm}>
                   Siguiente
                 </button>
               </>
@@ -531,7 +531,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
 
                 <button
                   type="submit"
-                  className="btnAgregaar"
+                  className="btnAdd"
                   disabled={loading}
                 >
                   {loading ? "Confirmando..." : "Finalizar compra"}
@@ -542,36 +542,36 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
         </div>
 
         <aside className="checkout-summary">
-          <h2>Resumen de tu pedido ({carrito.length})</h2>
+          <h2>Resumen de tu pedido ({cart.length})</h2>
 
-          {carrito.map((producto) => (
-            <div className="order-summary-item" key={producto.id}>
+          {cart.map((product) => (
+            <div className="order-summary-item" key={product.id}>
               <img
-                src={producto.images[0]}
-                alt={producto.name}
+                src={product.images[0]}
+                alt={product.name}
                 className="order-summary-img"
               />
               <div>
-                <p className="order-summary-name">{producto.name}</p>
-                {producto.color && (
-                  <p className="checkout-detalle">Color: {producto.color}</p>
+                <p className="order-summary-name">{product.name}</p>
+                {product.color && (
+                  <p className="checkout-detail">Color: {product.color}</p>
                 )}
-                {producto.talle && (
-                  <p className="checkout-detalle">Talle: {producto.talle}</p>
+                {product.size && (
+                  <p className="checkout-detail">Talle: {product.size}</p>
                 )}
-                <p className="checkout-detalle">
-                  Cantidad: {producto.cantidad}
+                <p className="checkout-detail">
+                  Cantidad: {product.quantity}
                 </p>
               </div>
-              <p className="precio">
-                {formatearPrecio(producto.price * producto.cantidad)}
+              <p className="price">
+                {formatPrice(product.price * product.quantity)}
               </p>
             </div>
           ))}
 
           <div className="summary-row">
             <span>Subtotal</span>
-            <span>{formatearPrecio(total)}</span>
+            <span>{formatPrice(total)}</span>
           </div>
 
           <div className="summary-row">
@@ -580,7 +580,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
               {deliveryConfirmed
                 ? deliveryCost === 0
                   ? "Gratis"
-                  : formatearPrecio(deliveryCost)
+                  : formatPrice(deliveryCost)
                 : "A calcular"}
             </span>
           </div>
@@ -588,7 +588,7 @@ export function OrderConfirmation({ carrito, calcularTotal, vaciarCarrito }) {
           <div className="summary-row summary-total">
             <span>Total</span>
             <span>
-              {formatearPrecio(total + (deliveryConfirmed ? deliveryCost : 0))}
+              {formatPrice(total + (deliveryConfirmed ? deliveryCost : 0))}
             </span>
           </div>
         </aside>

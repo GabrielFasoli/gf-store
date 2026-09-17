@@ -1,4 +1,4 @@
-export function Niños() {
+export function Kids() {
   return (
     <div>
       <h1>Niños</h1>

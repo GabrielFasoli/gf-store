@@ -1,11 +1,11 @@
-export const formatearPrecio = (precio) =>
+export const formatPrice = (price) =>
   new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(precio);
+  }).format(price);
 
-export const ProductsFilterTag = (productos, tag) => {
-  return productos.filter((p) => p.tags?.includes(tag));
+export const ProductsFilterTag = (products, tag) => {
+  return products.filter((p) => p.tags?.includes(tag));
 };

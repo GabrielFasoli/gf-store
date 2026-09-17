@@ -1,82 +1,82 @@
 import { useState } from "react";
 
 export function useCard() {
-  const [carrito, setCarrito] = useState(() => {
-    const productosLocalStorage = window.localStorage.getItem("carrito");
-    return productosLocalStorage ? JSON.parse(productosLocalStorage) : [];
+  const [cart, setCart] = useState(() => {
+    const cartLocalStorage = window.localStorage.getItem("carrito");
+    return cartLocalStorage ? JSON.parse(cartLocalStorage) : [];
   });
-  const [carritoAbierto, setCarritoAbierto] = useState(false);
-  const toggleCarrito = () => {
-    setCarritoAbierto(!carritoAbierto);
+  const [cartOpen, setCartOpen] = useState(false);
+  const toggleCart = () => {
+    setCartOpen(!cartOpen);
   };
-  const agregarProductos = (producto) => {
-    let productoEnCarrito = carrito.find(
-      (product) => product.id === producto.id,
+  const addProduct = (product) => {
+    let productInCart = cart.find(
+      (p) => p.id === product.id,
     );
 
-    let carritoNuevo;
+    let newCart;
 
-    if (productoEnCarrito) {
-      carritoNuevo = carrito.map((product) => {
-        return product.id === producto.id
-          ? { ...product, cantidad: product.cantidad + 1 }
+    if (productInCart) {
+      newCart = cart.map((p) => {
+        return p.id === product.id
+          ? { ...p, quantity: p.quantity + 1 }
+          : p;
+      });
+    } else {
+      newCart = [...cart, { ...product, quantity: 1 }];
+    }
+
+    setCart(newCart);
+    localStorage.setItem("carrito", JSON.stringify(newCart));
+  };
+
+  const increaseProduct = (id) => {
+    const increasedCart = cart.map((product) => {
+      return product.id === id
+        ? { ...product, quantity: product.quantity + 1 }
+        : product;
+    });
+    setCart(increasedCart);
+    localStorage.setItem("carrito", JSON.stringify(increasedCart));
+  };
+  const decreaseProduct = (id) => {
+    const productInCart = cart.find((product) => product.id === id);
+    let decreasedCart;
+    if (productInCart.quantity > 1) {
+      decreasedCart = cart.map((product) => {
+        return product.id === id
+          ? { ...product, quantity: product.quantity - 1 }
           : product;
       });
     } else {
-      carritoNuevo = [...carrito, { ...producto, cantidad: 1 }];
+      decreasedCart = cart.filter((product) => product.id !== id);
     }
-
-    setCarrito(carritoNuevo);
-    localStorage.setItem("carrito", JSON.stringify(carritoNuevo));
+    setCart(decreasedCart);
+    localStorage.setItem("carrito", JSON.stringify(decreasedCart));
   };
-
-  const sumarProducts = (id) => {
-    const sumaDeProductos = carrito.map((producto) => {
-      return producto.id === id
-        ? { ...producto, cantidad: producto.cantidad + 1 }
-        : producto;
-    });
-    setCarrito(sumaDeProductos);
-    localStorage.setItem("carrito", JSON.stringify(sumaDeProductos));
+  const removeProduct = (id) => {
+    const updatedCart = cart.filter((p) => p.id !== id);
+    setCart(updatedCart);
+    localStorage.setItem("carrito", JSON.stringify(updatedCart));
   };
-  const restarProducts = (id) => {
-    const productoEnCarrito = carrito.find((producto) => producto.id === id);
-    let restaDeProductos;
-    if (productoEnCarrito.cantidad > 1) {
-      restaDeProductos = carrito.map((producto) => {
-        return producto.id === id
-          ? { ...producto, cantidad: producto.cantidad - 1 }
-          : producto;
-      });
-    } else {
-      restaDeProductos = carrito.filter((producto) => producto.id !== id);
-    }
-    setCarrito(restaDeProductos);
-    localStorage.setItem("carrito", JSON.stringify(restaDeProductos));
-  };
-  const eliminarProducto = (id) => {
-    const eliminarproducto = carrito.filter((p) => p.id !== id);
-    setCarrito(eliminarproducto);
-    localStorage.setItem("carrito", JSON.stringify(eliminarproducto));
-  };
-  const calcularTotal = () => {
-    return carrito.reduce((acc, { price, cantidad }) => {
-      return acc + price * cantidad;
+  const calculateTotal = () => {
+    return cart.reduce((acc, { price, quantity }) => {
+      return acc + price * quantity;
     }, 0);
   };
-  const vaciarCarrito = () => {
-    setCarrito([]);
+  const clearCart = () => {
+    setCart([]);
     localStorage.removeItem("carrito");
   };
   return {
-    carrito,
-    carritoAbierto,
-    agregarProductos,
-    sumarProducts,
-    restarProducts,
-    calcularTotal,
-    toggleCarrito,
-    eliminarProducto,
-    vaciarCarrito,
+    cart,
+    cartOpen,
+    addProduct,
+    increaseProduct,
+    decreaseProduct,
+    calculateTotal,
+    toggleCart,
+    removeProduct,
+    clearCart,
   };
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const mensajes = [
+const messages = [
   " 🚚 Envío gratis a partir de $180.000",
   "💳 Hasta 12 cuotas sin interés",
   "🔥 Descubrí las nuevas colecciones",
@@ -12,7 +12,7 @@ export function AnnouncementBar() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % mensajes.length);
+      setIndex((prev) => (prev + 1) % messages.length);
     }, 6000);
 
     return () => clearInterval(interval);
@@ -20,7 +20,7 @@ export function AnnouncementBar() {
 
   return (
     <div className="announcement-bar">
-      <p>{mensajes[index]}</p>
+      <p>{messages[index]}</p>
     </div>
   );
 }

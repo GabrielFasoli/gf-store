@@ -7,7 +7,7 @@
 
 h1,
 h2,
-.titulo-marca {
+.brand-title {
   font-family: "Bebas Neue", sans-serif;
 }
 
@@ -24,30 +24,30 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-.contenedor-main {
+.main-container {
   width: 100%;
 
   padding: 2rem 10rem;
 }
-.contenedor-main h1 {
+.main-container h1 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   color: #1a1a2e;
   text-align: center;
 }
 
-.grilla-productos {
+.products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 @media (max-width: 900px) {
-  .grilla-productos {
+  .products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 500px) {
-  .grilla-productos {
+  .products-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -61,42 +61,42 @@ body {
 }
 
 /* ============================================
-   CARD DE PRODUCTO — components/ProductsCards.jsx
+   PRODUCT CARD — components/ProductsCards.jsx
    ============================================ */
 
-/* contenedor de la card: sin fondo ni sombra, la foto va directa sobre la página */
-.producto-card {
+/* card container: no background or shadow, the photo sits directly on the page */
+.product-card {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* wrapper de las dos imágenes: necesario para que la secundaria se superponga */
-.cards-dinamic {
+/* wrapper for the two images: needed so the secondary one can overlap */
+.dynamic-cards {
   position: relative;
 }
 
-/* imagen secundaria: oculta por defecto, se superpone sobre la principal */
-.image-secundary {
+/* secondary image: hidden by default, overlaps the main one */
+.image-secondary {
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0;
 }
 
-/* al pasar el mouse, aparece la segunda foto */
-.cards-dinamic:hover .image-secundary {
+/* on hover, the second photo appears */
+.dynamic-cards:hover .image-secondary {
   opacity: 1;
 }
 
-/* transición suave entre las dos fotos */
-.image-principal,
-.image-secundary {
+/* smooth transition between the two photos */
+.image-main,
+.image-secondary {
   transition: opacity 0.5s ease;
 }
 
-/* imágenes: cuadradas, llenan todo el espacio sin padding */
-.producto-card img {
+/* images: square, fill the whole space with no padding */
+.product-card img {
   width: 100%;
   aspect-ratio: 1 / 1;
   height: auto;
@@ -104,8 +104,8 @@ body {
   background-color: #f5f5f5;
 }
 
-/* bloque de texto debajo de la foto, alineado a la izquierda */
-.producto-card .producto-info {
+/* text block below the photo, left-aligned */
+.product-card .product-info {
   padding: 0.75rem 0 0;
   display: flex;
   flex-direction: column;
@@ -113,8 +113,8 @@ body {
   gap: 0.25rem;
 }
 
-/* nombre del producto, cortado a 2 líneas máximo */
-.producto-card .producto-info h3 {
+/* product name, clamped to 2 lines max */
+.product-card .product-info h3 {
   font-size: 0.9rem;
   font-weight: 600;
   color: #1a1a2e;
@@ -124,8 +124,8 @@ body {
   overflow: hidden;
 }
 
-/* precio */
-.producto-card .producto-info .precio {
+/* price */
+.product-card .product-info .price {
   font-size: 0.9rem;
   font-weight: 700;
   color: #1a1a2e;
@@ -135,7 +135,7 @@ body {
   color: inherit;
   display: block;
 }
-.carrito-btn {
+.cart-btn {
   border-radius: 40%;
   position: relative;
   background: none;
@@ -144,11 +144,11 @@ body {
   padding: 0.3rem;
   transition: all 0.3s ease;
 }
-.carrito-btn:hover {
+.cart-btn:hover {
   background-color: rgba(68, 56, 56, 0.15);
 }
 
-.carrito-badge {
+.cart-badge {
   position: absolute;
   top: -1px;
   right: -7px;
@@ -163,11 +163,11 @@ body {
   align-items: center;
   justify-content: center;
 }
-.carrito-badge.visible {
+.cart-badge.visible {
   display: flex;
 }
 
-.panel-carrito {
+.cart-panel {
   position: fixed;
   top: 0;
   right: 0;
@@ -183,7 +183,7 @@ body {
   transform: translateX(100%);
   transition: transform 0.35s ease;
 }
-.panel-carrito.activo {
+.cart-panel.active {
   transform: translateX(0);
 }
 .panel-header {
@@ -195,11 +195,11 @@ body {
   padding: 1.5rem;
   border-bottom: 2px solid #e8e8ec;
 }
-.panel-carrito .panel-header h2 {
+.cart-panel .panel-header h2 {
   font-size: 1.5rem;
   color: #1a1a2e;
 }
-.panel-carrito .panel-header .btn-cerrar {
+.cart-panel .panel-header .btn-close {
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -207,17 +207,17 @@ body {
   color: #a0a0b0;
   transition: all 0.3s ease;
 }
-.panel-carrito .panel-header .btn-cerrar:hover {
+.cart-panel .panel-header .btn-close:hover {
   color: #e94560;
 }
-.panel-carrito #contCarrito {
+.cart-panel #cartItems {
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.panel-carrito #totalCarrito {
+.cart-panel #cartFooter {
   border-top: 2px solid #f5f5f5;
   padding-top: 1rem;
 }
@@ -227,16 +227,16 @@ body {
   color: #1a1a2e;
   text-align: left;
 }
-.panel-carrito #totalCarrito .total-precio span {
+.cart-panel #cartFooter .total-price span {
   color: #e94560;
   font-size: 1.3rem;
 }
 
 /* ============================================
-   ITEM DEL CARRITO — components/ProductsCarrito.jsx
+   CART ITEM — components/ProductsCart.jsx
    ============================================ */
 
-.carrito-item {
+.cart-item {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -245,14 +245,14 @@ body {
   background-color: #f5f5f5;
 }
 
-.carrito-item-header {
+.cart-item-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
 }
 
-.carrito-item-header h3 {
+.cart-item-header h3 {
   font-size: 0.85rem;
   color: #1a1a2e;
   display: -webkit-box;
@@ -261,13 +261,13 @@ body {
   overflow: hidden;
 }
 
-.carrito-item-body {
+.cart-item-body {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
 }
 
-.carrito-item-img {
+.cart-item-img {
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -276,19 +276,19 @@ body {
   border-radius: 8px;
 }
 
-.carrito-item-info {
+.cart-item-info {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.carrito-item .precio {
+.cart-item .price {
   font-size: 0.9rem;
   color: #e94560;
   font-weight: 600;
 }
 
-.btn-basura {
+.btn-trash {
   background: none;
   border: none;
   cursor: pointer;
@@ -299,12 +299,12 @@ body {
   transition: all 0.3s ease;
 }
 
-.btn-basura:hover {
+.btn-trash:hover {
   color: #e94560;
 }
 
 /* ============================================
-   CONTROLES DE CANTIDAD — +/-
+   QUANTITY CONTROLS — +/-
    ============================================ */
 
 .quantity-controls {
@@ -372,7 +372,7 @@ body {
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 150;
 }
-.overlay.activo {
+.overlay.active {
   display: block;
 }
 
@@ -460,7 +460,7 @@ body {
 }
 
 /* ============================================
-   BANNER — componente components/Banner.jsx
+   BANNER — component components/Banner.jsx
    ============================================ */
 
 .banner-style {
@@ -476,7 +476,7 @@ body {
   display: block;
 }
 
-.banner-contenido {
+.banner-content {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -484,15 +484,15 @@ body {
   max-width: 420px;
 }
 
-.banner-botones {
+.banner-buttons {
   display: flex;
   gap: 0.75rem;
 }
 
-/* --- título, por posición --- */
-.titulo-izq-abj,
-.titulo-izq-arr,
-.titulo-centro {
+/* --- title, by position --- */
+.title-left-bottom,
+.title-left-top,
+.title-center {
   font-size: 1.8rem;
   font-weight: 700;
   color: #ffffff;
@@ -502,10 +502,10 @@ body {
   width: fit-content;
 }
 
-/* --- subtítulo, por posición --- */
-.subtitulo-izq-abj,
-.subtitulo-izq-arr,
-.subtitulo-centro {
+/* --- subtitle, by position --- */
+.subtitle-left-bottom,
+.subtitle-left-top,
+.subtitle-center {
   font-size: 1rem;
   font-weight: 400;
   color: #1a1a2e;
@@ -514,10 +514,10 @@ body {
   width: fit-content;
 }
 
-/* --- botón, por posición --- */
-.banner-btn-izq-abj,
-.banner-btn-izq-arr,
-.banner-btn-centro {
+/* --- button, by position --- */
+.banner-btn-left-bottom,
+.banner-btn-left-top,
+.banner-btn-center {
   background-color: #ffffff;
   color: #1a1a2e;
   text-decoration: none;
@@ -528,15 +528,15 @@ body {
   display: inline-block;
 }
 
-.banner-btn-izq-abj:hover,
-.banner-btn-izq-arr:hover,
-.banner-btn-centro:hover {
+.banner-btn-left-bottom:hover,
+.banner-btn-left-top:hover,
+.banner-btn-center:hover {
   background-color: #1a1a2e;
   color: #ffffff;
 }
 
-/* --- posición del contenedor general --- */
-.posicion-centro {
+/* --- position of the overall container --- */
+.position-center {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -544,17 +544,17 @@ body {
   text-align: center;
 }
 
-.posicion-izq-abj {
+.position-left-bottom {
   bottom: 2rem;
   left: 2rem;
 }
 
-.posicion-izq-arr {
+.position-left-top {
   top: 2rem;
   left: 2rem;
 }
 /* ============================================
-   CARRUSEL DE PRODUCTOS DESTACADOS
+   FEATURED PRODUCTS CAROUSEL
    components/CarrouselCard.jsx
    ============================================ */
 
@@ -583,7 +583,7 @@ body {
   }
 }
 /* ============================================
-   CARRUSEL "COMPRÁ EL LOOK" — CarrouselBanner + CarrouselCard
+   "SHOP THE LOOK" CAROUSEL — CarrouselBanner + CarrouselCard
    ============================================ */
 
 .carousel-looks-header {
@@ -627,7 +627,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
 }
-/*ANIMACION */
+/* ANIMATION */
 @keyframes carousel-fade-in {
   from {
     opacity: 0;
@@ -652,7 +652,7 @@ body {
   transition: transform 1s ease;
 }
 
-/* --- botones de navegación, flotando sobre las fotos --- */
+/* --- navigation buttons, floating over the photos --- */
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -705,15 +705,15 @@ body {
 }
 
 /* ============================================
-   DETALLE DE PRODUCTO — layout general
+   PRODUCT DETAIL — general layout
    pages/productsdetails/ProductsDetails.jsx
    ============================================ */
 
-.detalle-producto {
+.product-detail {
   padding-top: 1.5rem;
 }
 
-.detalle-principal {
+.main-detail {
   display: grid;
   grid-template-columns: 3.5fr 1fr;
   gap: 2rem;
@@ -721,15 +721,15 @@ body {
 }
 
 @media (max-width: 900px) {
-  .detalle-principal {
+  .main-detail {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
 }
 
 /* ============================================
-   GALERÍA DE IMÁGENES
-   pages/productsdetails/GaleriaImagenes.jsx
+   IMAGE GALLERY
+   pages/productsdetails/ImageGallery.jsx
    ============================================ */
 
 .image-gallery {
@@ -780,7 +780,7 @@ body {
 
 /* ============================================
    BREADCRUMB
-   components/Breadcrumb.jsx
+   components/BreadCrumb.jsx
    ============================================ */
 
 .breadcrumb {
@@ -807,9 +807,9 @@ body {
 }
 
 /* ============================================
-   INFO DE COMPRA — columna derecha
+   PURCHASE INFO — right column
    ============================================ */
-.info-compra {
+.purchase-info {
   top: 0px;
   align-self: start;
   position: sticky;
@@ -818,7 +818,7 @@ body {
   gap: 1rem;
   padding-right: 20px;
 }
-.info-compra h1 {
+.purchase-info h1 {
   text-transform: uppercase;
   font-size: 1.4rem;
   font-weight: 700;
@@ -827,52 +827,52 @@ body {
   margin: 0;
 }
 
-.info-compra .precio {
+.purchase-info .price {
   font-size: 1rem;
   font-weight: 700;
   color: #1a1a2e;
 }
 
 /* ============================================
-   ESTRELLAS / RATING
-   components/Estrellas.jsx
+   STARS / RATING
+   components/Stars.jsx
    ============================================ */
 
-.estrellas {
+.stars {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.estrellas-iconos {
+.stars-icons {
   color: #1a1a2e;
   font-size: 1rem;
   letter-spacing: 2px;
 }
 
-.estrellas-texto {
+.stars-text {
   font-size: 0.85rem;
   color: #a0a0b0;
 }
 
 /* ============================================
-   SELECTOR DE COLORES
-   pages/productsdetails/SelectorColores.jsx
+   COLOR SELECTOR
+   pages/productsdetails/SelectColors.jsx
    ============================================ */
 
-.selector-colores {
+.color-selector {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-.selector-colores > p {
+.color-selector > p {
   font-size: 0.9rem;
   font-weight: 600;
   color: #1a1a2e;
 }
 
-.colores-opciones {
+.color-options {
   display: flex;
   gap: 0.6rem;
   flex-wrap: wrap;
@@ -897,38 +897,38 @@ body {
   border-color: #a0a0b0;
 }
 
-.color-thumb.activo {
+.color-thumb.active {
   border-color: #1a1a2e;
 }
 
-.color-actual {
+.current-color {
   font-size: 0.85rem;
   color: #a0a0b0;
 }
 
 /* ============================================
-   SELECTOR DE TALLES
+   SIZE SELECTOR
    ============================================ */
 
-.talles {
+.sizes {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
 
-.talles > p {
+.sizes > p {
   font-size: 0.9rem;
   font-weight: 600;
   color: #1a1a2e;
 }
 
-.talles-opciones {
+.size-options {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2px;
 }
 
-.talle-btn {
+.size-btn {
   padding: 0.7rem 0.2rem;
   background-color: #e7e1e1;
   border: none;
@@ -939,25 +939,25 @@ body {
   transition: all 0.2s ease;
 }
 
-.talle-btn:hover {
+.size-btn:hover {
   background-color: #c6c6c6;
 }
 
-.talle-btn.activo {
+.size-btn.active {
   background-color: #1a1a2e;
   color: #ffffff;
 }
-.Error-talle p {
+.size-error p {
   font-size: 0.85rem;
   color: red;
   margin-top: 0.3rem;
 }
 
 /* ============================================
-   BOTÓN AÑADIR AL CARRITO (en detalle)
+   ADD TO CART BUTTON (in detail page)
    ============================================ */
 
-.btnAgregaar {
+.btnAdd {
   width: 100%;
   padding: 1rem;
   background-color: #1a1a2e;
@@ -969,37 +969,37 @@ body {
   transition: all 0.3s ease;
 }
 
-.btnAgregaar:hover {
+.btnAdd:hover {
   background-color: #ed4c67;
 }
 
 /* ============================================
-   DESCRIPCIÓN Y DETALLES
+   DESCRIPTION AND DETAILS
    ============================================ */
 
-.bloque-descripcion,
-.bloque-detalles {
+.description-block,
+.details-block {
   border-top: 1px solid #f5f5f5;
   padding-top: 1.2rem;
   margin-top: 0.5rem;
 }
 
-.bloque-descripcion h3,
-.bloque-detalles h3 {
+.description-block h3,
+.details-block h3 {
   font-size: 1rem;
   font-weight: 700;
   color: #1a1a2e;
   margin-bottom: 0.7rem;
 }
 
-.bloque-descripcion p {
+.description-block p {
   font-size: 0.9rem;
   line-height: 1.6;
   color: #16213e;
   white-space: pre-line;
 }
 
-.bloque-detalles ul {
+.details-block ul {
   list-style: disc;
   padding-left: 1.2rem;
   display: flex;
@@ -1007,24 +1007,24 @@ body {
   gap: 0.4rem;
 }
 
-.bloque-detalles li {
+.details-block li {
   font-size: 0.9rem;
   line-height: 1.5;
   color: #16213e;
 }
 
 /* ============================================
-   PRODUCTOS RELACIONADOS
-   components/ProductosRelacionados.jsx
+   RELATED PRODUCTS
+   components/RelatedProducts.jsx
    ============================================ */
 
-.productos-relacionados {
+.related-products {
   margin-top: 4rem;
   border-top: 1px solid #f5f5f5;
   padding-top: 2rem;
 }
 
-.productos-relacionados h2 {
+.related-products h2 {
   font-size: 1.4rem;
   font-weight: 700;
   color: #1a1a2e;
@@ -1032,15 +1032,15 @@ body {
   margin-bottom: 1.5rem;
 }
 /* ============================================
-   ACORDEÓN — descripción y detalles
-   components/Acordeon.jsx
+   ACCORDION — description and details
+   components/Accordion.jsx
    ============================================ */
 
-.acordeon {
+.accordion {
   border-top: 1px solid #e8e8ec;
 }
 
-.acordeon-header {
+.accordion-header {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1057,22 +1057,22 @@ body {
   transition: all 0.3s ease;
 }
 
-.acordeon-header:hover {
+.accordion-header:hover {
   color: #e94560;
 }
 
-.acordeon-icono {
+.accordion-icon {
   font-size: 1.3rem;
   font-weight: 400;
   line-height: 1;
 }
 
-.acordeon-contenido {
+.accordion-content {
   padding-bottom: 1.2rem;
-  animation: acordeon-abrir 0.3s ease;
+  animation: accordion-open 0.3s ease;
 }
 
-@keyframes acordeon-abrir {
+@keyframes accordion-open {
   from {
     opacity: 0;
     transform: translateY(-6px);
@@ -1083,14 +1083,14 @@ body {
   }
 }
 
-.descripcion-texto {
+.description-text {
   font-size: 0.9rem;
   line-height: 1.6;
   color: #16213e;
   white-space: pre-line;
 }
 
-.lista-detalles {
+.details-list {
   list-style: disc;
   padding-left: 1.2rem;
   display: flex;
@@ -1098,23 +1098,23 @@ body {
   gap: 0.4rem;
 }
 
-.lista-detalles li {
+.details-list li {
   font-size: 0.9rem;
   line-height: 1.5;
   color: #16213e;
 }
 /* ============================================
-   PRODUCTOS RELACIONADOS
+   RELATED PRODUCTS
    pages/productsdetails/RelatedProducts.jsx
    ============================================ */
 
-.productos-relacionados {
+.related-products {
   grid-column: 1;
   margin-top: 3rem;
   border-top: 1px solid #e8e8ec;
   padding-top: 2rem;
 }
-.productos-relacionados h2 {
+.related-products h2 {
   font-size: 1.4rem;
   font-weight: 700;
   color: #1a1a2e;
@@ -1131,20 +1131,20 @@ body {
   padding-left: 5rem;
 }
 
-.cards-grid-small .producto-card {
+.cards-grid-small .product-card {
   padding-inline: 0.75rem;
 }
 
-.cards-grid-small .producto-card img {
+.cards-grid-small .product-card img {
   aspect-ratio: 1 / 1;
   height: auto;
 }
 
-.cards-grid-small .producto-info h3 {
+.cards-grid-small .product-info h3 {
   font-size: 0.8rem;
 }
 
-.cards-grid-small .producto-info .precio {
+.cards-grid-small .product-info .price {
   font-size: 0.85rem;
 }
 
@@ -1160,7 +1160,7 @@ body {
   }
 }
 /* ============================================
-   ADMIN PANEL — pages/admin/AdminPanel.jsx
+   ADMIN PANEL — pages/adminPanel/CreateProduct.jsx
    ============================================ */
 
 .admin-form {
@@ -1217,7 +1217,7 @@ body {
   font-size: 1rem;
 }
 
-.btn-agregar-imagen {
+.btn-add-image {
   background: none;
   border: 1px dashed #a0a0b0;
   color: #a0a0b0;
@@ -1228,12 +1228,12 @@ body {
   transition: all 0.3s ease;
 }
 
-.btn-agregar-imagen:hover {
+.btn-add-image:hover {
   border-color: #1a1a2e;
   color: #1a1a2e;
 }
 
-.exito-msg {
+.success-msg {
   color: #1a1a2e;
   background-color: #f5f5f5;
   border: 1px solid #d0d0d8;
@@ -1241,13 +1241,13 @@ body {
   margin-bottom: 1rem;
 }
 /* ============================================
-   FILTRAR Y ORDENAR — components/FilterSort.jsx
-   Panel lateral con chips de filtros aplicados,
-   orden por precio/novedades, checkboxes de color
-   y slider de rango de precio.
+   FILTER AND SORT — components/FilterSort.jsx
+   Side panel with chips for applied filters,
+   sort by price/newest, color checkboxes
+   and a price range slider.
    ============================================ */
 
-/* el panel en sí, separado de las cards con un borde a la derecha */
+/* the panel itself, separated from the cards by a right border */
 .filter-panel {
   position: fixed;
   top: 0;
@@ -1260,9 +1260,9 @@ body {
   padding: 1.5rem;
   transform: translateX(100%);
   transition: transform 0.35s ease;
-  /* sin max-height ni overflow-y */
+  /* no max-height or overflow-y */
 }
-/* título "Filtrar y ordenar" + botón "Borrar todo", uno a cada lado */
+/* "Filtrar y ordenar" title + "Borrar todo" button, one on each side */
 .filter-header {
   display: flex;
   align-items: center;
@@ -1284,7 +1284,7 @@ body {
   color: #1a1a2e;
 }
 
-/* fila de chips (categoría, subcategoría, colores activos) */
+/* row of chips (category, subcategory, active colors) */
 .applied-chips {
   display: flex;
   flex-wrap: wrap;
@@ -1292,7 +1292,7 @@ body {
   margin: 1rem 0;
 }
 
-/* cada chip individual, tipo pastilla con borde */
+/* each individual chip, pill-shaped with a border */
 .chip {
   display: flex;
   align-items: center;
@@ -1303,7 +1303,7 @@ body {
   text-transform: capitalize;
 }
 
-/* la "X" para sacar el chip */
+/* the "X" to remove the chip */
 .chip button {
   background: none;
   border: none;
@@ -1311,7 +1311,7 @@ body {
   font-size: 0.8rem;
 }
 
-/* contenedor de los dos sliders de precio, superpuestos */
+/* container for the two overlapping price sliders */
 .price-range {
   position: relative;
   height: 30px;
@@ -1323,7 +1323,7 @@ body {
   top: 10px;
 }
 
-/* números de precio mínimo/máximo, debajo del slider */
+/* min/max price numbers, below the slider */
 .price-labels {
   display: flex;
   justify-content: space-between;
@@ -1331,9 +1331,9 @@ body {
   margin-top: 0.5rem;
 }
 
-/* en mobile: el panel pasa a estar arriba de las cards, no al costado */
+/* on mobile: the panel sits above the cards instead of beside them */
 @media (max-width: 900px) {
-  .categoria-layout-grid {
+  .category-layout-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1345,15 +1345,15 @@ body {
   }
 }
 
-/*BOTON DE FILTRO */
-.categoria-header {
+/* FILTER BUTTON */
+.category-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
 }
 
-.btn-abrir-filtros {
+.btn-open-filters {
   border: 1px solid #1a1a2e;
   background: none;
   display: flex;
@@ -1365,12 +1365,12 @@ body {
   transition: all 0.3s ease;
 }
 
-.btn-abrir-filtros:hover {
+.btn-open-filters:hover {
   background-color: #1a1a2e;
   color: #ffffff;
 }
 /* ============================================
-   PANEL DE FILTROS — deslizante, igual patrón que el carrito
+   FILTER PANEL — slide-in, same pattern as the cart
    ============================================ */
 
 .filter-panel {
@@ -1388,18 +1388,18 @@ body {
   transition: transform 0.35s ease;
 }
 
-.filter-panel.activo {
+.filter-panel.active {
   transform: translateX(0);
 }
 
-.categoria-header {
+.category-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
 }
 
-.btn-abrir-filtros {
+.btn-open-filters {
   border: 1px solid #1a1a2e;
   background: none;
   padding: 0.6rem 1.2rem;
@@ -1409,7 +1409,7 @@ body {
   white-space: nowrap;
 }
 
-.btn-abrir-filtros:hover {
+.btn-open-filters:hover {
   background-color: #1a1a2e;
   color: #ffffff;
 }
@@ -1432,7 +1432,7 @@ body {
   font-size: 1.1rem;
   padding: 0 0.3rem;
 }
-/* labels de radio/checkbox: cada uno en su propia línea, con espacio */
+/* radio/checkbox labels: each one on its own line, with spacing */
 .filter-panel label {
   display: flex;
   align-items: center;
@@ -1446,7 +1446,7 @@ body {
   margin-bottom: 0;
 }
 
-/* checkboxes: más grandes y cuadrados (ya lo son por defecto, esto los agranda) */
+/* checkboxes: bigger and square (they already are by default, this just enlarges them) */
 .filter-panel input[type="checkbox"] {
   width: 22px;
   height: 22px;
@@ -1454,7 +1454,7 @@ body {
   accent-color: #1a1a2e;
 }
 
-/* radios: más grandes, sin tocar la forma redonda (son de "Ordenar por") */
+/* radios: bigger, without touching the round shape (these belong to "Ordenar por") */
 .filter-panel input[type="radio"] {
   width: 22px;
   height: 22px;
@@ -1462,7 +1462,7 @@ body {
   accent-color: #1a1a2e;
 }
 /* ============================================
-   MENÚ DE USUARIO — components/UserMenu.jsx
+   USER MENU — components/UserMenu.jsx
    ============================================ */
 
 .user-menu {
@@ -1547,7 +1547,7 @@ body {
   background-color: #e94560;
   border-color: #e94560;
 }
-/*SVG DE USER*/
+/* USER SVG */
 .user-btn {
   background: none;
   border: none;
@@ -1570,8 +1570,8 @@ body {
   margin-top: 4px;
 }
 /* ============================================
-   CARRITO — ENVÍO GRATIS
-   components/CarritoPanel.jsx
+   CART — FREE SHIPPING
+   components/CartPanel.jsx
    ============================================ */
 
 .free-shipping-info {
@@ -1604,8 +1604,8 @@ body {
 }
 
 /* ============================================
-   CARRITO — ESTADO VACÍO
-   components/CarritoPanel.jsx
+   CART — EMPTY STATE
+   components/CartPanel.jsx
    ============================================ */
 
 .empty-cart {
@@ -1732,7 +1732,7 @@ body {
   justify-content: space-between;
 }
 
-.checkout-detalle {
+.checkout-detail {
   font-size: 0.85rem;
   color: #a0a0b0;
 }
@@ -1823,7 +1823,7 @@ body {
 }
 
 /* ============================================
-   CHECKOUT — ESTADO VACÍO
+   CHECKOUT — EMPTY STATE
    ============================================ */
 
 .checkout-page {
@@ -1864,7 +1864,7 @@ body {
   margin-top: 3rem;
 }
 
-.btn-empezar {
+.btn-start {
   margin-top: 1rem;
   padding: 0.7rem 2rem;
   background-color: #1a1a2e;
@@ -1875,12 +1875,12 @@ body {
   transition: all 0.3s ease;
 }
 
-.btn-empezar:hover {
+.btn-start:hover {
   background-color: #e94560;
 }
 
 /* ============================================
-   CHECKOUT — RECOMENDACIONES
+   CHECKOUT — RECOMMENDATIONS
    ============================================ */
 
 .checkout-recommendations {
@@ -1898,7 +1898,7 @@ body {
 }
 
 /* ============================================
-   GRILLA CHICA
+   SMALL GRID
    ============================================ */
 
 .cards-grid-small {
@@ -1908,20 +1908,20 @@ body {
   width: 70%;
 }
 
-.cards-grid-small .producto-card {
+.cards-grid-small .product-card {
   padding-inline: 0.75rem;
 }
 
-.cards-grid-small .producto-card img {
+.cards-grid-small .product-card img {
   aspect-ratio: 1 / 1;
   height: auto;
 }
 
-.cards-grid-small .producto-info h3 {
+.cards-grid-small .product-info h3 {
   font-size: 0.8rem;
 }
 
-.cards-grid-small .producto-info .precio {
+.cards-grid-small .product-info .price {
   font-size: 0.85rem;
 }
 
@@ -2030,13 +2030,13 @@ body {
   color: #1a1a2e;
 }
 
-.order-summary-item .precio {
+.order-summary-item .price {
   margin-left: auto;
   font-size: 0.85rem;
 }
 
 /* ============================================
-   ORDER SUCCESS — card centrada con tilde
+   ORDER SUCCESS — centered card with checkmark
    ============================================ */
 
 .order-success-overlay {
@@ -2151,7 +2151,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.delivery-option.activo {
+.delivery-option.active {
   border-color: #1a1a2e;
   background-color: #f5f5f5;
 }

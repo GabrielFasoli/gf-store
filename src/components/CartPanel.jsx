@@ -1,18 +1,18 @@
-import { ProductsCarrito } from "./productsCarrito.jsx";
-import { formatearPrecio } from "../logic/utils.js";
+import { ProductsCart } from "./ProductsCart.jsx";
+import { formatPrice } from "../logic/utils.js";
 import { FREE_SHIPPING_THRESHOLD } from "../config/shipping.js";
 import { useNavigate } from "react-router-dom";
 
-export const CarritoPanel = ({
-  carrito,
-  carritoAbierto,
-  toggleCarrito,
-  sumarProducts,
-  restarProducts,
-  calcularTotal,
-  eliminarProductos,
+export const CartPanel = ({
+  cart,
+  cartOpen,
+  toggleCart,
+  increaseProduct,
+  decreaseProduct,
+  calculateTotal,
+  removeProduct,
 }) => {
-  const total = calcularTotal();
+  const total = calculateTotal();
   const amountToFreeShipping = FREE_SHIPPING_THRESHOLD - total;
   const shippingProgress = Math.min(
     (total / FREE_SHIPPING_THRESHOLD) * 100,
@@ -23,40 +23,40 @@ export const CarritoPanel = ({
   return (
     <>
       <div
-        className={`overlay ${carritoAbierto ? "activo" : ""}`}
-        onClick={toggleCarrito}
+        className={`overlay ${cartOpen ? "active" : ""}`}
+        onClick={toggleCart}
       ></div>
 
-      <div className={`panel-carrito ${carritoAbierto ? "activo" : ""}`}>
+      <div className={`cart-panel ${cartOpen ? "active" : ""}`}>
         <header className="panel-header">
           <h2>Tu carrito</h2>
-          <button className="btn-cerrar" onClick={toggleCarrito}>
+          <button className="btn-close" onClick={toggleCart}>
             ✕
           </button>
         </header>
 
-        {carrito.length > 0 ? (
+        {cart.length > 0 ? (
           <>
-            <div id="contCarrito">
-              {carrito.map((producto) => (
-                <ProductsCarrito
-                  key={producto.id}
-                  producto={producto}
-                  sumar={sumarProducts}
-                  restar={restarProducts}
-                  eliminarProductos={eliminarProductos}
+            <div id="cartItems">
+              {cart.map((product) => (
+                <ProductsCart
+                  key={product.id}
+                  product={product}
+                  increase={increaseProduct}
+                  decrease={decreaseProduct}
+                  removeProduct={removeProduct}
                 />
               ))}
             </div>
             <p className="total-price">
-              Total: <span>{formatearPrecio(total)}</span>
+              Total: <span>{formatPrice(total)}</span>
             </p>
-            <footer id="totalCarrito">
+            <footer id="cartFooter">
               <div className="free-shipping-info">
                 {amountToFreeShipping > 0 ? (
                   <p>
                     Te faltan{" "}
-                    <strong>{formatearPrecio(amountToFreeShipping)}</strong>{" "}
+                    <strong>{formatPrice(amountToFreeShipping)}</strong>{" "}
                     para envío gratis
                   </p>
                 ) : (
@@ -71,15 +71,15 @@ export const CarritoPanel = ({
                 </div>
 
                 <div className="progress-labels">
-                  <span>{formatearPrecio(total)}</span>
-                  <span>{formatearPrecio(FREE_SHIPPING_THRESHOLD)}</span>
+                  <span>{formatPrice(total)}</span>
+                  <span>{formatPrice(FREE_SHIPPING_THRESHOLD)}</span>
                 </div>
               </div>
 
               <button
-                className="btnAgregaar"
+                className="btnAdd"
                 onClick={() => {
-                  toggleCarrito();
+                  toggleCart();
                   navigate("/checkout");
                 }}
               >

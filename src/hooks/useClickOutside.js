@@ -3,10 +3,10 @@ import { useEffect } from "react";
 export function useClickOutside(ref, callback) {
   useEffect(() => {
     const handleClickOutside = (event) => {
-      const seHizoClickAfuera =
+      const wasClickOutside =
         ref.current && !ref.current.contains(event.target);
 
-      if (seHizoClickAfuera) {
+      if (wasClickOutside) {
         callback();
       }
     };

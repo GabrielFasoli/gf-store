@@ -1,86 +1,86 @@
 import { useParams } from "react-router-dom";
 import { useProduct } from "../../hooks/useProduct";
-import { ImageGallery } from "./GaleriaImages.jsx";
+import { ImageGallery } from "./ImageGallery.jsx";
 import { SelectColor } from "./SelectColors.jsx";
 import { Stars } from "../../components/Stars.jsx";
 import { BreadCrumb } from "../../components/BreadCrumb.jsx";
-import { formatearPrecio } from "../../logic/utils.js";
+import { formatPrice } from "../../logic/utils.js";
 import { useState } from "react";
-import { Acordeon } from "../../components/Acordeon.jsx";
+import { Accordion } from "../../components/Accordion.jsx";
 import { RelatedProducts } from "./RelatedProducts.jsx";
 import { LogoLoader } from "../../components/LogoLoader.jsx";
 
-export function ProductsDetails({ agregarAlCarrito, productos }) {
+export function ProductsDetails({ addToCart, products }) {
   const { id } = useParams();
   const { product, loanding } = useProduct(id);
-  const [talleSeleccionado, setTalleSeleccionado] = useState(null);
-  const [errorTalleSelecionado, SetErrorTalleSelecionado] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [sizeError, setSizeError] = useState(false);
   console.log(product);
   if (loanding) return <LogoLoader></LogoLoader>;
   if (!product) return <p>Producto no encontrado</p>;
 
   return (
-    <main className=" detalle-producto">
-      <div className="detalle-principal">
+    <main className=" product-detail">
+      <div className="main-detail">
         <ImageGallery images={product.images} name={product.name} />
 
-        <div className="info-compra">
+        <div className="purchase-info">
           <BreadCrumb
-            categoria={product.categoria}
-            subcategoria={product.subcategoria}
+            category={product.category}
+            subcategory={product.subcategory}
           />
 
           <h1>{product.name}</h1>
           <Stars rating={product.rating} reviewsCount={product.reviewsCount} />
-          <p className="precio">{formatearPrecio(product.price)}</p>
+          <p className="price">{formatPrice(product.price)}</p>
 
-          <SelectColor productos={productos} productoActual={product} />
+          <SelectColor products={products} currentProduct={product} />
 
           {product.sizes?.length > 0 && (
-            <div className="talles">
+            <div className="sizes">
               <p>Talle:</p>
-              <div className="talles-opciones">
-                {product.sizes.map((talle) => (
+              <div className="size-options">
+                {product.sizes.map((size) => (
                   <button
-                    key={talle}
-                    className={`talle-btn ${talleSeleccionado === talle ? "activo" : ""}`}
+                    key={size}
+                    className={`size-btn ${selectedSize === size ? "active" : ""}`}
                     onClick={() => {
-                      setTalleSeleccionado(talle);
-                      SetErrorTalleSelecionado(false);
+                      setSelectedSize(size);
+                      setSizeError(false);
                     }}
                   >
-                    {talle}
+                    {size}
                   </button>
                 ))}
               </div>
-              <div className="Error-talle" role="alert">
-                {errorTalleSelecionado && <p>Por favor, seleciona tu talle</p>}
+              <div className="size-error" role="alert">
+                {sizeError && <p>Por favor, seleciona tu talle</p>}
               </div>
             </div>
           )}
 
           <button
-            className="btnAgregaar"
+            className="btnAdd"
             onClick={() => {
-              if (!talleSeleccionado) {
-                SetErrorTalleSelecionado(true);
+              if (!selectedSize) {
+                setSizeError(true);
                 return;
               }
-              agregarAlCarrito({ ...product, talle: talleSeleccionado });
+              addToCart({ ...product, size: selectedSize });
             }}
           >
             Añadir al carrito
           </button>
-          <Acordeon titulo="Descripcion  ">
+          <Accordion title="Descripcion  ">
             {product.description && (
-              <div className="bloque-descripcion">
+              <div className="description-block">
                 <p>{product.description} </p>
               </div>
             )}
-          </Acordeon>
-          <Acordeon titulo="Detalles">
+          </Accordion>
+          <Accordion title="Detalles">
             {product.details?.length > 0 && (
-              <div className="bloque-detalles">
+              <div className="details-block">
                 <ul>
                   {product.details.map((item) => (
                     <li key={item}>{item}</li>
@@ -88,10 +88,10 @@ export function ProductsDetails({ agregarAlCarrito, productos }) {
                 </ul>
               </div>
             )}
-          </Acordeon>
+          </Accordion>
         </div>
         <RelatedProducts
-          products={productos}
+          products={products}
           category={product.category}
           subCategory={product.subCategory}
         ></RelatedProducts>

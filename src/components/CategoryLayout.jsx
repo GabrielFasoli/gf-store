@@ -3,27 +3,27 @@ import { useParams } from "react-router-dom";
 import { ProductsCards } from "./ProductsCards.jsx";
 import { FilterSort } from "../pages/filterProducts/FilterSort.jsx";
 
-export const CategoriaLayout = ({ productos, categoria, titulo }) => {
-  const { subcategoria } = useParams();
-  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
+export const CategoryLayout = ({ products, category, title }) => {
+  const { subcategoria: subcategory } = useParams();
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const productosFiltrados = productos.filter((p) => {
-    const coincideCategoria = p.categoria === categoria;
-    const coincideSubcategoria = subcategoria
-      ? p.subcategoria === subcategoria
+  const filteredProducts = products.filter((p) => {
+    const matchesCategory = p.category === category;
+    const matchesSubcategory = subcategory
+      ? p.subcategory === subcategory
       : true;
-    return coincideCategoria && coincideSubcategoria;
+    return matchesCategory && matchesSubcategory;
   });
 
-  const [resultado, setResultado] = useState(productosFiltrados);
+  const [result, setResult] = useState(filteredProducts);
 
   return (
-    <main className="contenedor-main">
-      <div className="categoria-header">
-        <h1>{subcategoria || titulo}</h1>
+    <main className="main-container">
+      <div className="category-header">
+        <h1>{subcategory || title}</h1>
         <button
-          className="btn-abrir-filtros"
-          onClick={() => setFiltrosAbiertos(true)}
+          className="btn-open-filters"
+          onClick={() => setFiltersOpen(true)}
         >
           Filtrar y ordenar
           <svg
@@ -50,26 +50,26 @@ export const CategoriaLayout = ({ productos, categoria, titulo }) => {
         </button>
       </div>
 
-      <section className="grilla-productos">
-        {resultado.length > 0 ? (
-          <ProductsCards products={resultado} />
+      <section className="products-grid">
+        {result.length > 0 ? (
+          <ProductsCards products={result} />
         ) : (
           <p className="error-msg">No se encontraron productos</p>
         )}
       </section>
 
       <div
-        className={`overlay ${filtrosAbiertos ? "activo" : ""}`}
-        onClick={() => setFiltrosAbiertos(false)}
+        className={`overlay ${filtersOpen ? "active" : ""}`}
+        onClick={() => setFiltersOpen(false)}
       ></div>
 
       <FilterSort
-        baseProducts={productosFiltrados}
-        category={categoria}
-        subcategory={subcategoria}
-        onResult={setResultado}
-        onClose={() => setFiltrosAbiertos(false)}
-        abierto={filtrosAbiertos}
+        baseProducts={filteredProducts}
+        category={category}
+        subcategory={subcategory}
+        onResult={setResult}
+        onClose={() => setFiltersOpen(false)}
+        open={filtersOpen}
       />
     </main>
   );

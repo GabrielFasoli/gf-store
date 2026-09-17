@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Acordeon } from "../../components/Acordeon";
+import { Accordion } from "../../components/Accordion";
 
 export function FilterSort({
   baseProducts,
@@ -8,7 +8,7 @@ export function FilterSort({
   subcategory,
   onResult,
   onClose,
-  abierto,
+  open,
 }) {
   const navigate = useNavigate();
   const [sortBy, setSortBy] = useState("");
@@ -78,7 +78,7 @@ export function FilterSort({
   };
 
   return (
-    <aside className={`filter-panel ${abierto ? "activo" : ""}`}>
+    <aside className={`filter-panel ${open ? "active" : ""}`}>
       <div className="filter-header">
         <h3>Filtrar y ordenar</h3>
         <div className="filter-header-actions">
@@ -111,7 +111,7 @@ export function FilterSort({
         ))}
       </div>
 
-      <Acordeon titulo="Ordenar por">
+      <Accordion title="Ordenar por">
         <label>
           <input
             type="radio"
@@ -139,9 +139,9 @@ export function FilterSort({
           />
           Novedades
         </label>
-      </Acordeon>
+      </Accordion>
 
-      <Acordeon titulo="Talle">
+      <Accordion title="Talle">
         {availableSizes.map((size) => (
           <label key={size}>
             <input
@@ -152,9 +152,9 @@ export function FilterSort({
             {size}
           </label>
         ))}
-      </Acordeon>
+      </Accordion>
 
-      <Acordeon titulo="Color">
+      <Accordion title="Color">
         {availableColors.map((color) => (
           <label key={color}>
             <input
@@ -165,9 +165,9 @@ export function FilterSort({
             {color}
           </label>
         ))}
-      </Acordeon>
+      </Accordion>
 
-      <Acordeon titulo="Precio">
+      <Accordion title="Precio">
         <div className="price-range">
           <input
             type="range"
@@ -188,7 +188,7 @@ export function FilterSort({
           <span>${minPrice.toLocaleString("es-AR")}</span>
           <span>${maxPrice.toLocaleString("es-AR")}</span>
         </div>
-      </Acordeon>
+      </Accordion>
     </aside>
   );
 }

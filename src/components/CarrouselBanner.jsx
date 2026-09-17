@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "../index.css";
-export const CarrouselBanner = ({ productos, tag }) => {
+export const CarrouselBanner = ({ products, tag }) => {
   const [position, setPosition] = useState(0);
-  const productosLooks = productos.slice(position, position + 3);
+  const carouselProducts = products.slice(position, position + 3);
 
-  const posicionMaxima = Math.max(productos.length - 3, 0);
-  const esInicio = position === 0;
-  const esFinal = position >= posicionMaxima;
+  const maxPosition = Math.max(products.length - 3, 0);
+  const isStart = position === 0;
+  const isEnd = position >= maxPosition;
 
-  const avanzar = () => {
-    setPosition(Math.min(position + 3, posicionMaxima));
+  const next = () => {
+    setPosition(Math.min(position + 3, maxPosition));
   };
 
-  const retroceder = () => {
+  const prev = () => {
     setPosition(Math.max(position - 3, 0));
   };
 
@@ -26,14 +26,14 @@ export const CarrouselBanner = ({ productos, tag }) => {
 
       <div className="carousel-looks">
         <button
-          className={`carousel-btn ${esInicio ? "oculto" : ""}`}
-          onClick={retroceder}
+          className={`carousel-btn ${isStart ? "oculto" : ""}`}
+          onClick={prev}
         >
           ←
         </button>
 
         <div className="looks-grid">
-          {productosLooks.map((p) => {
+          {carouselProducts.map((p) => {
             return (
               <article className="carousel-card" key={p.id}>
                 <img src={p.url} alt={p.name} />
@@ -43,8 +43,8 @@ export const CarrouselBanner = ({ productos, tag }) => {
         </div>
 
         <button
-          className={`carousel-btn ${esFinal ? "oculto" : ""}`}
-          onClick={avanzar}
+          className={`carousel-btn ${isEnd ? "oculto" : ""}`}
+          onClick={next}
         >
           →
         </button>

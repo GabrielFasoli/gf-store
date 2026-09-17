@@ -6,7 +6,7 @@ export const RelatedProducts = ({ products, category, subCategory }) => {
     return categoryProducts && subCategoryProducts;
   });
   return (
-    <section className="productos-relacionados">
+    <section className="related-products">
       <h2>Productos Relacionados</h2>
       {selectedProducts.length > 0 ? (
         <div className="cards-grid-small">
