@@ -8,6 +8,7 @@ import { formatearPrecio } from "../../logic/utils.js";
 import { useState } from "react";
 import { Acordeon } from "../../components/Acordeon.jsx";
 import { RelatedProducts } from "./RelatedProducts.jsx";
+import { LogoLoader } from "../../components/LogoLoader.jsx";
 
 export function ProductsDetails({ agregarAlCarrito, productos }) {
   const { id } = useParams();
@@ -15,7 +16,7 @@ export function ProductsDetails({ agregarAlCarrito, productos }) {
   const [talleSeleccionado, setTalleSeleccionado] = useState(null);
   const [errorTalleSelecionado, SetErrorTalleSelecionado] = useState(false);
   console.log(product);
-  if (loanding) return <p>Cargando...</p>;
+  if (loanding) return <LogoLoader></LogoLoader>;
   if (!product) return <p>Producto no encontrado</p>;
 
   return (

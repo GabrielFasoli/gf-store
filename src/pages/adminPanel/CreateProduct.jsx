@@ -8,6 +8,7 @@ const productoVacio = {
   price: 0,
   categoria: "",
   subcategoria: "",
+  sport: "",
   tags: [],
   images: [""],
   description: "",
@@ -70,6 +71,7 @@ export function CreateProduct() {
         ...form,
         price: precioNum,
         stock: stockNum,
+        sport: form.sport,
         rating: ratingNum,
         reviewsCount: reviewsNum,
         sizes: form.sizes
@@ -177,6 +179,24 @@ export function CreateProduct() {
             onChange={handleChange}
             required
           />
+        </div>
+        <div className="form-group">
+          <label htmlFor="sport">Deporte</label>
+          <select
+            id="sport"
+            name="sport"
+            value={form.sport}
+            onChange={handleChange}
+          >
+            <option value="">Seleccioná un deporte</option>
+            <option value="running">Running</option>
+            <option value="futbol">Fútbol</option>
+            <option value="training">Training / Gimnasio</option>
+            <option value="basquet">Básquet</option>
+            <option value="outdoor">Outdoor</option>
+            <option value="hyrox">Hyrox</option>
+            <option value="crossfit">CrossFit</option>
+          </select>
         </div>
 
         <div className="form-group">

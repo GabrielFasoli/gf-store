@@ -5,8 +5,7 @@
   align-items: center;
   min-height: 76px;
   padding: 0 2rem;
-  background-color: #fff;
-  border-bottom: 1px solid #e8e8e8;
+  background-color: #1a1d1a;
 }
 
 .navbar-logo {
@@ -29,6 +28,9 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.navbar-links a {
+  color: rgb(255, 240, 240);
 }
 
 /*
@@ -247,4 +249,23 @@
     font-size: 0.95rem;
     text-decoration: none;
   }
+}
+.add-product {
+  display: inline-block;
+  text-decoration: none;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 30px;
+}
+
+.add-product:hover {
+  background-color: #1a1d1a;
+  color: #ffffff;
+  border: 2px solid white;
 }

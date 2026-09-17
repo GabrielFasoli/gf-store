@@ -17,6 +17,7 @@ import { AllProducts } from "./pages/products/AllProducts.jsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { CheckoutPage } from "./pages/checkout/CheckoutPage.jsx";
 import { OrderConfirmation } from "./pages/orderconfirmation/OrderConfirmation.jsx";
+import { AnnouncementBar } from "./components/AnnouncementBar.jsx";
 
 function App() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <>
+      {!ocultarNav && <AnnouncementBar />}
       {!ocultarNav && <Nav carrito={carrito} toggleCarrito={toggleCarrito} />}
       <Routes>
         <Route

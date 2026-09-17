@@ -1,10 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { categorias } from "../../data/categorias";
 import logo from "../../assets/logo.svg";
 import { UserMenu } from "../UserMenu";
+import { useAuth } from "../../context/AuthContext";
+import { ADMIN_EMAILS } from "../../config/admins";
 import "./Nav.css";
 
 export const DesktopNav = ({ carrito, toggleCarrito }) => {
+  const { user } = useAuth();
+  const esAdmin = user && ADMIN_EMAILS.includes(user.email);
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -53,7 +57,7 @@ export const DesktopNav = ({ carrito, toggleCarrito }) => {
           xmlns="http://www.w3.org/2000/svg"
           width="22"
           height="22"
-          fill="#000000"
+          fill="#fffbfb"
           viewBox="0 0 256 256"
         >
           <path d="M216,64H176a48,48,0,0,0-96,0H40A16,16,0,0,0,24,80V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm88,168H40V80H80V96a8,8,0,0,0,16,0V80h64V96a8,8,0,0,0,16,0V80h40Z"></path>
@@ -64,7 +68,11 @@ export const DesktopNav = ({ carrito, toggleCarrito }) => {
           {carrito.length}
         </span>
       </button>
-      <NavLink to={"/admin"}>Cargar Producto</NavLink>
+      {esAdmin && (
+        <Link to="/admin" className="add-product">
+          Cargar producto
+        </Link>
+      )}
     </nav>
   );
 };
