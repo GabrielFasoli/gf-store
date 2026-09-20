@@ -15,9 +15,13 @@ export function ProductsDetails({ addToCart, products }) {
   const { product, loanding } = useProduct(id);
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeError, setSizeError] = useState(false);
-  console.log(product);
+  const [quantity, setQuantity] = useState(1);
+
   if (loanding) return <LogoLoader></LogoLoader>;
   if (!product) return <p>Producto no encontrado</p>;
+
+  const stockDelTalleSeleccionado =
+    product.sizes?.find((s) => s.size === selectedSize)?.stock ?? 0;
 
   return (
     <main className=" product-detail">
@@ -31,6 +35,9 @@ export function ProductsDetails({ addToCart, products }) {
           />
 
           <h1>{product.name}</h1>
+          {product.subtitle && (
+            <p className="product-subtitle">{product.subtitle}</p>
+          )}
           <Stars rating={product.rating} reviewsCount={product.reviewsCount} />
           <p className="price">{formatPrice(product.price)}</p>
 
@@ -40,22 +47,54 @@ export function ProductsDetails({ addToCart, products }) {
             <div className="sizes">
               <p>Talle:</p>
               <div className="size-options">
-                {product.sizes.map((size) => (
+                {product.sizes.map((s) => (
                   <button
-                    key={size}
-                    className={`size-btn ${selectedSize === size ? "active" : ""}`}
+                    key={s.size}
+                    className={`size-btn ${selectedSize === s.size ? "active" : ""} ${s.stock === 0 ? "disabled" : ""}`}
+                    disabled={s.stock === 0}
                     onClick={() => {
-                      setSelectedSize(size);
+                      setSelectedSize(s.size);
                       setSizeError(false);
+                      setQuantity(1);
                     }}
                   >
-                    {size}
+                    {s.size}
                   </button>
                 ))}
               </div>
               <div className="size-error" role="alert">
                 {sizeError && <p>Por favor, seleciona tu talle</p>}
               </div>
+            </div>
+          )}
+
+          {selectedSize && (
+            <div className="item-count">
+              <p>Cantidad:</p>
+              <div className="item-count-controls">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                  disabled={quantity <= 1}
+                >
+                  −
+                </button>
+                <span>{quantity}</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQuantity((prev) =>
+                      Math.min(stockDelTalleSeleccionado, prev + 1),
+                    )
+                  }
+                  disabled={quantity >= stockDelTalleSeleccionado}
+                >
+                  +
+                </button>
+              </div>
+              <p className="stock-hint">
+                {stockDelTalleSeleccionado} disponibles
+              </p>
             </div>
           )}
 
@@ -66,7 +105,7 @@ export function ProductsDetails({ addToCart, products }) {
                 setSizeError(true);
                 return;
               }
-              addToCart({ ...product, size: selectedSize });
+              addToCart({ ...product, size: selectedSize, quantity });
             }}
           >
             Añadir al carrito

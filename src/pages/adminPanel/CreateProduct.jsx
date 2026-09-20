@@ -4,6 +4,7 @@ import { addProducts } from "../../service/products.js";
 const emptyProduct = {
   brand: "",
   name: "",
+  subtitle: "",
   price: 0,
   category: "",
   subcategory: "",
@@ -12,8 +13,7 @@ const emptyProduct = {
   images: [""],
   description: "",
   details: [],
-  stock: 0,
-  sizes: [],
+  sizes: [{ size: "", stock: "" }],
   rating: 0,
   reviewsCount: 0,
   color: "",
@@ -46,21 +46,45 @@ export function CreateProduct() {
     setForm((prev) => ({ ...prev, images: newImages }));
   };
 
+  const handleSizeChange = (index, field, value) => {
+    const newSizes = [...form.sizes];
+    newSizes[index] = { ...newSizes[index], [field]: value };
+    setForm((prev) => ({ ...prev, sizes: newSizes }));
+  };
+
+  const addSize = () => {
+    setForm((prev) => ({
+      ...prev,
+      sizes: [...prev.sizes, { size: "", stock: "" }],
+    }));
+  };
+
+  const removeSize = (index) => {
+    const newSizes = form.sizes.filter((_, i) => i !== index);
+    setForm((prev) => ({ ...prev, sizes: newSizes }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const priceNum = Number(form.price);
-    const stockNum = Number(form.stock);
     const ratingNum = Number(form.rating);
     const reviewsNum = Number(form.reviewsCount);
 
     if (isNaN(priceNum) || priceNum <= 0) {
-      alert("El price tiene que ser un número mayor a 0");
+      alert("El precio tiene que ser un número mayor a 0");
       return;
     }
 
-    if (isNaN(stockNum) || stockNum < 0) {
-      alert("El stock tiene que ser un número válido");
+    const validatedSizes = form.sizes
+      .filter((s) => s.size.trim() !== "")
+      .map((s) => ({
+        size: s.size.trim(),
+        stock: Number(s.stock) || 0,
+      }));
+
+    if (validatedSizes.length === 0) {
+      alert("Agregá al menos un talle con su stock");
       return;
     }
 
@@ -69,15 +93,10 @@ export function CreateProduct() {
       await addProducts({
         ...form,
         price: priceNum,
-        stock: stockNum,
         sport: form.sport,
         rating: ratingNum,
         reviewsCount: reviewsNum,
-        sizes: form.sizes
-          .toString()
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean),
+        sizes: validatedSizes,
         tags: form.tags
           .toString()
           .split(",")
@@ -129,6 +148,16 @@ export function CreateProduct() {
             onChange={handleChange}
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="subtitle">Subtítulo / descripción corta</label>
+          <input
+            id="subtitle"
+            name="subtitle"
+            placeholder="Zapatillas de entrenamiento unisex"
+            value={form.subtitle}
+            onChange={handleChange}
+          />
+        </div>
 
         <div className="form-group">
           <label htmlFor="price">Precio *</label>
@@ -138,19 +167,6 @@ export function CreateProduct() {
             type="number"
             placeholder="210000"
             value={form.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="stock">Stock *</label>
-          <input
-            id="stock"
-            name="stock"
-            type="number"
-            placeholder="15"
-            value={form.stock}
             onChange={handleChange}
             required
           />
@@ -258,14 +274,34 @@ export function CreateProduct() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="sizes">Talles (separados por coma)</label>
-          <input
-            id="sizes"
-            name="sizes"
-            placeholder="S, M, L, XL"
-            value={form.sizes}
-            onChange={handleChange}
-          />
+          <label>Talles y stock</label>
+          {form.sizes.map((s, index) => (
+            <div key={index} className="size-row">
+              <input
+                placeholder="Talle (S, M, 40...)"
+                value={s.size}
+                onChange={(e) =>
+                  handleSizeChange(index, "size", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                placeholder="Stock"
+                value={s.stock}
+                onChange={(e) =>
+                  handleSizeChange(index, "stock", e.target.value)
+                }
+              />
+              {form.sizes.length > 1 && (
+                <button type="button" onClick={() => removeSize(index)}>
+                  ✕
+                </button>
+              )}
+            </div>
+          ))}
+          <button type="button" className="btn-add-image" onClick={addSize}>
+            + Agregar talle
+          </button>
         </div>
 
         <div className="form-group">
@@ -318,11 +354,7 @@ export function CreateProduct() {
               )}
             </div>
           ))}
-          <button
-            type="button"
-            className="btn-add-image"
-            onClick={addImage}
-          >
+          <button type="button" className="btn-add-image" onClick={addImage}>
             + Agregar imagen
           </button>
         </div>

@@ -19,7 +19,7 @@ export function FilterSort({
     ...new Set(baseProducts.map((p) => p.color).filter(Boolean)),
   ];
   const availableSizes = [
-    ...new Set(baseProducts.flatMap((p) => p.sizes || [])),
+    ...new Set(baseProducts.flatMap((p) => p.sizes?.map((s) => s.size) || [])),
   ];
 
   const prices = baseProducts.map((p) => p.price);
@@ -53,7 +53,10 @@ export function FilterSort({
     const matchesColor =
       activeColors.length === 0 || activeColors.includes(p.color);
     const matchesSize =
-      activeSizes.length === 0 || activeSizes.some((s) => p.sizes?.includes(s));
+      activeSizes.length === 0 ||
+      activeSizes.some((s) =>
+        p.sizes?.some((productSize) => productSize.size === s),
+      );
     const matchesPrice = p.price >= minPrice && p.price <= maxPrice;
     return matchesColor && matchesSize && matchesPrice;
   });

@@ -80,3 +80,12 @@
   padding: 0.8rem 1rem;
   margin-bottom: 1rem;
 }
+.size-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.size-row input {
+  flex: 1;
+}
