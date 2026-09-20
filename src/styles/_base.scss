@@ -40,6 +40,17 @@ body {
     text-align: center;
   }
 }
+@media (max-width: 900px) {
+  .main-container {
+    padding: 1.5rem 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .main-container {
+    padding: 1rem 1rem;
+  }
+}
 
 .products-grid {
   display: grid;

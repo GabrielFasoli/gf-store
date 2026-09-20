@@ -1,19 +1,40 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
-export const CarrouselBanner = ({ products, tag }) => {
-  const [position, setPosition] = useState(0);
-  const carouselProducts = products.slice(position, position + 3);
+import { useState, useEffect } from "react";
+const useItemsPerView = () => {
+  const [itemsPerView, setItemsPerView] = useState(() => {
+    if (window.innerWidth <= 500) return 1;
+    if (window.innerWidth <= 900) return 2;
+    return 3;
+  });
 
-  const maxPosition = Math.max(products.length - 3, 0);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 500) setItemsPerView(1);
+      else if (window.innerWidth <= 900) setItemsPerView(2);
+      else setItemsPerView(3);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return itemsPerView;
+};
+
+export const CarrouselBanner = ({ products, tag }) => {
+  const itemsPerView = useItemsPerView();
+  const [position, setPosition] = useState(0);
+  const carouselProducts = products.slice(position, position + itemsPerView);
+
+  const maxPosition = Math.max(products.length - itemsPerView, 0);
   const isStart = position === 0;
   const isEnd = position >= maxPosition;
 
   const next = () => {
-    setPosition(Math.min(position + 3, maxPosition));
+    setPosition(Math.min(position + itemsPerView, maxPosition));
   };
 
   const prev = () => {
-    setPosition(Math.max(position - 3, 0));
+    setPosition(Math.max(position - itemsPerView, 0));
   };
 
   return (

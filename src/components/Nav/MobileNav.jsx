@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { categories } from "../../data/categories";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { UserMenu } from "../UserMenu";
 import logo from "../../assets/logo.svg";
 
 export const MobileNav = ({ cart, toggleCart }) => {
@@ -28,10 +27,20 @@ export const MobileNav = ({ cart, toggleCart }) => {
 
   return (
     <nav className="mobile-nav" ref={navRef}>
+      <button
+        type="button"
+        className="hamburger-btn"
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-label="Abrir menú"
+        aria-expanded={menuOpen}
+      >
+        ☰
+      </button>
+
       <NavLink to="/" className="mobile-logo" onClick={closeMenu}>
         <img src={logo} alt="GFStore" />
       </NavLink>
-      <UserMenu></UserMenu>
+
       <div className="mobile-actions">
         <button
           type="button"
@@ -51,16 +60,6 @@ export const MobileNav = ({ cart, toggleCart }) => {
           <span className={`cart-badge ${cart.length ? "visible" : ""}`}>
             {cart.length}
           </span>
-        </button>
-
-        <button
-          type="button"
-          className="hamburger-btn"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-label="Abrir menú"
-          aria-expanded={menuOpen}
-        >
-          ☰
         </button>
       </div>
 

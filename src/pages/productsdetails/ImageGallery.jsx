@@ -4,12 +4,11 @@ export function ImageGallery({ images, name }) {
   const [showAll, setShowAll] = useState(false);
 
   const limit = 4;
-  const visibleImages = showAll ? images : images.slice(0, limit);
   const hasMore = images.length > limit;
 
   return (
-    <div className="image-gallery">
-      {visibleImages.map((img, index) => (
+    <div className={`image-gallery ${hasMore && !showAll ? "collapsed" : ""}`}>
+      {images.map((img, index) => (
         <img key={img} src={img} alt={`${name} - photo ${index + 1}`} />
       ))}
 

@@ -17,7 +17,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { CheckoutPage } from "./pages/checkout/CheckoutPage.jsx";
 import { OrderConfirmation } from "./pages/orderconfirmation/OrderConfirmation.jsx";
 import { AnnouncementBar } from "./components/AnnouncementBar.jsx";
-
+import { Footer } from "./components/Footer.jsx";
 function App() {
   const location = useLocation();
   const hideNav = location.pathname === "/order-confirmation";
@@ -41,9 +41,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            <Home products={products} addProduct={addProduct} />
-          }
+          element={<Home products={products} addProduct={addProduct} />}
         />
         <Route
           path="/mujer/:subcategoria?"
@@ -68,10 +66,7 @@ function App() {
         <Route
           path="/productsdetails/:id"
           element={
-            <ProductsDetails
-              addToCart={addProduct}
-              products={products}
-            />
+            <ProductsDetails addToCart={addProduct} products={products} />
           }
         />
         <Route
@@ -126,6 +121,7 @@ function App() {
           calculateTotal={calculateTotal}
         />
       )}
+      <Footer></Footer>
     </>
   );
 }

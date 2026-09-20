@@ -18,8 +18,9 @@
 
 @media (max-width: 900px) {
   .main-detail {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
+    padding-inline: 16px;
   }
 }
 
@@ -28,25 +29,40 @@
 // pages/productsdetails/ImageGallery.jsx
 // ============================================
 
-.image-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 5px;
-  position: relative;
-
-  img {
-    width: 100%;
-    aspect-ratio: 3/ 4;
-    object-fit: cover;
-    background-color: $color-bg-light;
-    display: block;
-  }
+/* desktop: solo las primeras 4 hasta que aprieten "Mostrar más" */
+.image-gallery.collapsed img:nth-child(n + 5) {
+  display: none;
 }
-.show-more-wrapper {
-  position: absolute;
-  left: 50%;
-  bottom: -16px;
-  transform: translateX(-50%);
+
+/* tablet y mobile: carrusel horizontal con swipe */
+@media (max-width: 900px) {
+  .image-gallery {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    min-width: 0;
+    max-width: 100%;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .image-gallery img,
+  .image-gallery.collapsed img:nth-child(n + 5) {
+    display: block;
+    flex: 0 0 85%;
+    width: 85%;
+    scroll-snap-align: center;
+    object-fit: cover;
+  }
+
+  .show-more-wrapper {
+    display: none;
+  }
 }
 .btn-show-more {
   margin-top: -30px;
@@ -106,9 +122,7 @@
 // PURCHASE INFO — right column
 // ============================================
 .purchase-info {
-  top: 0px;
   align-self: start;
-  position: sticky;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -132,6 +146,14 @@
     font-size: 1rem;
     font-weight: 700;
     color: $color-dark;
+  }
+}
+
+/* sticky solo en desktop; en tablet y mobile queda en el flujo normal */
+@media (min-width: 901px) {
+  .purchase-info {
+    position: sticky;
+    top: 0;
   }
 }
 
@@ -482,8 +504,13 @@
 }
 
 @media (max-width: 900px) {
+  .related-products h2 {
+    padding-left: 0;
+  }
+
   .cards-grid-small {
     grid-template-columns: repeat(2, 1fr);
+    padding-left: 0;
   }
 }
 

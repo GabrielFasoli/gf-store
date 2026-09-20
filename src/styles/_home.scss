@@ -17,6 +17,20 @@
   }
 }
 
+@media (max-width: 900px) {
+  .banner-style img {
+    height: 450px;
+  }
+}
+
+@media (max-width: 500px) {
+  .banner-style img {
+    margin-top: 0px;
+    height: 150px;
+    width: 100%;
+  }
+}
+
 .banner-content {
   position: absolute;
   display: flex;
@@ -94,11 +108,6 @@
   top: 2rem;
   left: 2rem;
 }
-
-// ============================================
-// FEATURED PRODUCTS CAROUSEL
-// components/CarrouselCard.jsx
-// ============================================
 
 .carousel-looks-cards {
   position: relative;
