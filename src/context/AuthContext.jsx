@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/config.js";
+import { checkRedirectResult } from "../firebase/auth.js";
 
 const AuthContext = createContext(null);
 
@@ -14,6 +15,12 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    checkRedirectResult().catch((error) => {
+      console.error("Error al procesar el login con redirect:", error);
+    });
   }, []);
 
   return (

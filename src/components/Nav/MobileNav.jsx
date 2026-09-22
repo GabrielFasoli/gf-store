@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { categories } from "../../data/categories";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { UserMenu } from "../UserMenu";
 import logo from "../../assets/logo.svg";
 
 export const MobileNav = ({ cart, toggleCart }) => {
@@ -34,7 +35,22 @@ export const MobileNav = ({ cart, toggleCart }) => {
         aria-label="Abrir menú"
         aria-expanded={menuOpen}
       >
-        ☰
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="#fafafa"
+          stroke="currentColor"
+          S
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
       </button>
 
       <NavLink to="/" className="mobile-logo" onClick={closeMenu}>
@@ -42,6 +58,8 @@ export const MobileNav = ({ cart, toggleCart }) => {
       </NavLink>
 
       <div className="mobile-actions">
+        <UserMenu></UserMenu>
+
         <button
           type="button"
           className="cart-btn"
@@ -52,7 +70,7 @@ export const MobileNav = ({ cart, toggleCart }) => {
             xmlns="http://www.w3.org/2000/svg"
             width="22"
             height="22"
-            fill="#000000"
+            fill="#fafafa"
             viewBox="0 0 256 256"
           >
             <path d="M216,64H176a48,48,0,0,0-96,0H40A16,16,0,0,0,24,80V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm88,168H40V80H80V96a8,8,0,0,0,16,0V80h64V96a8,8,0,0,0,16,0V80h40Z"></path>
